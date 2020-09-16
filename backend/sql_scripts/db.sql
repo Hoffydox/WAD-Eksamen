@@ -93,24 +93,42 @@ CREATE TABLE dbo.userPassword
 -- transaction table
 CREATE TABLE dbo.transaction
 (
-    firstName NVARCHAR(255) NOT NULL, --NOT NULL * det skal udfyldes
-    lastName NVARCHAR(255) NOT NULL,
-    email NVARCHAR(255) NOT NULL,
-    adresse NVARCHAR(255) NOT NULL,
-    city NVARCHAR(255) NOT NULL,
-    zipCode INT NOT NULL,
-    cardInfo INT NOT NULL,
-    amount INT NOT NULL,
-    timeSt INT NOT NULL,
-    transId INT NOT NULL,
+    transactionID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    trFirstName NVARCHAR(255) NOT NULL, --NOT NULL * det skal udfyldes
+    trLastName NVARCHAR(255) NOT NULL,
+    trEmail NVARCHAR(255) NOT NULL,
+    trAdresse NVARCHAR(255) NOT NULL,
+    trCity NVARCHAR(255) NOT NULL,
+    trZipCode INT NOT NULL,
+    trCardInfo INT NOT NULL,
+    trAmount INT NOT NULL,
+    trTimeSt INT NOT NULL,
     FK_userID INT NOT NULL,
-    FK_project NVARCHAR(255) NOT NULL,
+    FK_projectID INT NOT NULL,
 
 
-    CONSTRAINT FK_User_Transaction FOREIGN KEY (FK_userID) REFERENCES dbo.userLogin (userID)
+    CONSTRAINT FK_User_Transaction FOREIGN KEY (FK_userID) REFERENCES dbo.userLogin (userID),
     CONSTRAINT FK_Project_Transaction FOREIGN KEY (FK_projectID) REFERENCES dbo.project (projectID)
 );
         GO
+
+-- project table
+CREATE TABLE dbo.project
+(            
+    projectID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    projectName NVARCHAR(255) NOT NULL,
+    projectDescription NVARCHAR(255) NOT NULL,
+    projectGoal INT NOT NULL, 
+    projectPicture NVARCHAR(255) NOT NULL, 
+    projectTimeLimit INT NOT NULL,
+    FK_userID INT NOT NULL
+    --projectComments 
+    -- projectBenefits 
+
+    CONSTRAINT FK_User_Project FOREIGN KEY (FK_userID) REFERENCES dbo.userLogin (userID)
+);
+        GO
+
     
     
 
