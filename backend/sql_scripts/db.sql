@@ -1,4 +1,4 @@
-USE "1074171"
+USE "1081536"
 /* Database name */
 
 /* ------------------------- START OF DROPPING TABLES ---------------------- */
@@ -245,8 +245,12 @@ INSERT INTO dbo.project
     (projectName, projectDescription, projectGoal,  projectPicture,  projectTimeLimit, FK_userID)
 VALUES
     -- ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID),
-    ('Cats', 'Et projekt om katte', 20000, 'billede', 5, 1)
-   
+    ('Cats', 'Et projekt om katte', 20000, 'billede', 5, 1),
+    ('cars', 'Et projekt om biler', 50000, 'billede', 7, 3),
+    ('Lamper', 'Et projekt om lamper', 22000, 'billede', 4, 2),
+    ('Kræftens bekæmpelse', 'Et projekt om støtte til kræftens bekæmpelse', 1000000,'billede', 8, 3),
+    ('Hunde', 'Et projekt om hunde', 51000, 'billede', 3, 4)
+
      GO
 
 INSERT INTO dbo.transactionTable
