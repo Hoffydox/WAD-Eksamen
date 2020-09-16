@@ -1,4 +1,4 @@
-USE "1081536"/*DatabaseName */
+USE "1081568"/*DatabaseName */
 
 SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'
 
@@ -6,7 +6,7 @@ SELECT *
 FROM userRole
 
 SELECT *
-FROM userLogin
+FROM userLogin 
 
 SELECT *
 FROM userPassword

@@ -18,8 +18,6 @@ DROP CONSTRAINT IF EXISTS FK_Role_User
 GO
 
 
-
-
 -- Drop constraint if it already exists
 -- Table: userLogin
 -- Constraint: FK_Role_User
@@ -33,7 +31,6 @@ GO
 ALTER TABLE dbo.transactionTable
 DROP CONSTRAINT IF EXISTS FK_User_Transaction, FK_Project_Transaction
 GO
-
 
 
 -- Drop the table if it already exists
@@ -86,7 +83,7 @@ CREATE TABLE dbo.userLogin
     CONSTRAINT FK_Role_User FOREIGN KEY (FK_roleID) REFERENCES dbo.userRole (roleID)
 );
         GO
---//
+
 -- CREATING THIRD CONJUNCTION TABLE ("dbo.userLoginRole")
 /* many to many relationship mellem userRole og userLogin
         CREATE TABLE dbo.userLoginRole
@@ -98,7 +95,6 @@ CREATE TABLE dbo.userLogin
             CONSTRAINT FK_UserRole_Role FOREIGN KEY (FK_roleID) REFERENCES dbo.userRole (roleID)
         );
         */
---//
 
 -- CREATING USERS PASSWORD TABLE ("dbo.userPassword") --
 CREATE TABLE dbo.userPassword
@@ -171,34 +167,6 @@ CREATE TABLE dbo.transactionTable
 
 /* --------------------------- START OF POPULATING TABLES WITH DATA --------------------------- */
 
--- INSERTING DATA IN THE USER TABLE("dbo.userLogin") --
-/*
-        INSERT INTO dbo.userLogin
-            (userEmail)
-        VALUES
-            ('superadmin@ucn.dk'),
-            ('admin@ucn.com'),
-            ('User1@ucn.com'),
-			('User2@ucn.com'),
-			('User3@ucn.com'),
-			('User4@ucn.com'),
-			('User5@ucn.com'),
-			('User6@ucn.com'),
-			('User7@ucn.com'),
-			('User8@ucn.com'),
-			('User9@ucn.com'),
-			('User10@ucn.com'),
-			('User11@ucn.com'),
-			('User12@ucn.com'),
-			('User13@ucn.com'),
-			('User14@ucn.com'),
-			('User15@ucn.com')
-			
-        GO
-
-        */
---//
-
 -- INSERTING DATA IN THE USER ROLES TABLE ("dbo.userRole")
 INSERT INTO dbo.userRole
     (roleName, roleDescription)
@@ -260,32 +228,7 @@ VALUES
     ('Jens', 'Jens', 'Jens@ucn.dk', 'Gadevej 2', 'Aalborg', 9000, 12, 100, 10102010, 1, 1)
    
      GO
-    -- INSERTING VALUES IN THE THIRD JUNCTION TABLE ("dbo.userLoginRole")
-    /* DETTE ER KUN FOR MANY TO MANY RELATIONSHIP*/
-/*
-        INSERT INTO dbo.userLoginRole
-            (FK_userID, FK_roleID)
-        VALUES
-            (1, 1),
-            (2, 2),
-            (3, 2),
-			(4, 3),
-			(5, 3),
-			(6, 3),
-			(7, 4),
-			(8, 5),
-			(9, 5),
-			(10, 6),
-			(11, 6),
-			(12, 6),
-			(13, 6),
-			(14, 6),
-			(15, 6),
-			(16, 6),
-			(17, 6)
-        GO */
-
-    --//
+ 
 /* --------------------------- END OF POPULATING TABLES WITH DATA  --------------------------- */
 
 /* --------------------- START SELECTING DATA FROM THE DATABASE --------------------------- */
