@@ -11,3 +11,8 @@ FROM userLogin
 SELECT *
 FROM userPassword
 
+SELECT *
+FROM project
+
+SELECT *
+FROM transactionTable
