@@ -16,6 +16,25 @@ GO
 ALTER TABLE dbo.userLogin
 DROP CONSTRAINT IF EXISTS FK_Role_User
 GO
+
+
+-- Drop constraint if it already exists
+-- Table: userLogin
+-- Constraint: FK_Role_User
+ALTER TABLE dbo.transactionTable
+DROP CONSTRAINT IF EXISTS FK_User_Transaction, FK_Project_Transaction
+GO
+
+-- Drop constraint if it already exists
+-- Table: userLogin
+-- Constraint: FK_Role_User
+ALTER TABLE dbo.project
+DROP CONSTRAINT IF EXISTS FK_User_Project
+GO
+
+
+
+
 -- Drop the table if it already exists
 -- Table: userPassword
 DROP TABLE IF EXISTS dbo.userPassword
@@ -28,6 +47,14 @@ GO
 -- Drop the table if it already exists
 -- Table: userLogin
 DROP TABLE if EXISTS dbo.userLogin
+GO
+-- Drop the table if it already exists
+-- Table: transactionTable
+DROP TABLE if EXISTS dbo.transactionTable
+GO
+-- Drop the table if it already exists
+-- Table: project
+DROP TABLE if EXISTS dbo.project
 GO
 
 /* --------------------------- START OF CREATING TABLES --------------------------- */
@@ -91,7 +118,7 @@ CREATE TABLE dbo.userPassword
         */
 
 -- transaction table
-CREATE TABLE dbo.transaction
+CREATE TABLE dbo.transactionTable
 (
     transactionID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
     trFirstName NVARCHAR(255) NOT NULL, --NOT NULL * det skal udfyldes
