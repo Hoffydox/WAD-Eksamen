@@ -1,4 +1,4 @@
-USE "1081536"
+USE "1074171"
 /* Database name */
 
 /* ------------------------- START OF DROPPING TABLES ---------------------- */
@@ -18,12 +18,7 @@ DROP CONSTRAINT IF EXISTS FK_Role_User
 GO
 
 
--- Drop constraint if it already exists
--- Table: userLogin
--- Constraint: FK_Role_User
-ALTER TABLE dbo.transactionTable
-DROP CONSTRAINT IF EXISTS FK_User_Transaction, FK_Project_Transaction
-GO
+
 
 -- Drop constraint if it already exists
 -- Table: userLogin
@@ -32,6 +27,12 @@ ALTER TABLE dbo.project
 DROP CONSTRAINT IF EXISTS FK_User_Project
 GO
 
+-- Drop constraint if it already exists
+-- Table: userLogin
+-- Constraint: FK_Role_User
+ALTER TABLE dbo.transactionTable
+DROP CONSTRAINT IF EXISTS FK_User_Transaction, FK_Project_Transaction
+GO
 
 
 
@@ -48,14 +49,17 @@ GO
 -- Table: userLogin
 DROP TABLE if EXISTS dbo.userLogin
 GO
--- Drop the table if it already exists
--- Table: transactionTable
-DROP TABLE if EXISTS dbo.transactionTable
-GO
+
 -- Drop the table if it already exists
 -- Table: project
 DROP TABLE if EXISTS dbo.project
 GO
+
+-- Drop the table if it already exists
+-- Table: transactionTable
+DROP TABLE if EXISTS dbo.transactionTable
+GO
+
 
 /* --------------------------- START OF CREATING TABLES --------------------------- */
 
@@ -117,6 +121,23 @@ CREATE TABLE dbo.userPassword
             therefore we create two attributes and use them as FOREIGN KEY constraints which refer to the PRIMARY KEYS FROM THE OTHER TWO TABLES.
         */
 
+-- project table
+CREATE TABLE dbo.project
+(            
+    projectID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    projectName NVARCHAR(255) NOT NULL,
+    projectDescription NVARCHAR(255) NOT NULL,
+    projectGoal INT NOT NULL, 
+    projectPicture NVARCHAR(255) NOT NULL, 
+    projectTimeLimit INT NOT NULL,
+    FK_userID INT NOT NULL
+    --projectComments 
+    -- projectBenefits 
+
+    CONSTRAINT FK_User_Project FOREIGN KEY (FK_userID) REFERENCES dbo.userLogin (userID)
+);
+        GO
+
 -- transaction table
 CREATE TABLE dbo.transactionTable
 (
@@ -139,22 +160,7 @@ CREATE TABLE dbo.transactionTable
 );
         GO
 
--- project table
-CREATE TABLE dbo.project
-(            
-    projectID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    projectName NVARCHAR(255) NOT NULL,
-    projectDescription NVARCHAR(255) NOT NULL,
-    projectGoal INT NOT NULL, 
-    projectPicture NVARCHAR(255) NOT NULL, 
-    projectTimeLimit INT NOT NULL,
-    FK_userID INT NOT NULL
-    --projectComments 
-    -- projectBenefits 
 
-    CONSTRAINT FK_User_Project FOREIGN KEY (FK_userID) REFERENCES dbo.userLogin (userID)
-);
-        GO
 
     
     
@@ -235,6 +241,21 @@ VALUES
     (7, 'RandomPassword')
         GO
 
+INSERT INTO dbo.project
+    (projectName, projectDescription, projectGoal,  projectPicture,  projectTimeLimit, FK_userID)
+VALUES
+    -- ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID),
+    ('Cats', 'Et projekt om katte', 20000, 'billede', 5, 1)
+   
+     GO
+
+INSERT INTO dbo.transactionTable
+    ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID)
+VALUES
+    -- ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID),
+    ('Jens', 'Jens', 'Jens@ucn.dk', 'Gadevej 2', 'Aalborg', 9000, 12, 100, 10102010, 1, 1)
+   
+     GO
     -- INSERTING VALUES IN THE THIRD JUNCTION TABLE ("dbo.userLoginRole")
     /* DETTE ER KUN FOR MANY TO MANY RELATIONSHIP*/
 /*
