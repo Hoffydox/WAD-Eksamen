@@ -1,36 +1,30 @@
 USE "1074171"
-/* Database name */
 
--- what should you users be able to do?
-
--- what kind of info do we need to do these things, what shoud be shown on screen
--- design cunstuctors for, projectObj, CommentsObj og TransactionObj
 
 /* ------------------------- START OF DROPPING TABLES ---------------------- */
 
--- Drop constraint if it already exists
+-- Dropper constraint hvis den existere
 -- Table: userPassword
 -- Constraint: FK_Password_User
 ALTER TABLE dbo.userPassword
 DROP CONSTRAINT IF EXISTS FK_Password_User
 GO
 
--- Drop constraint if it already exists
+-- Dropper constraint hvis den existere
 -- Table: userLogin
 -- Constraint: FK_Role_User
 ALTER TABLE dbo.userLogin
 DROP CONSTRAINT IF EXISTS FK_Role_User
 GO
 
-
--- Drop constraint if it already exists
+-- Dropper constraint hvis den existere
 -- Table: userLogin
 -- Constraint: FK_Role_User
 ALTER TABLE dbo.project
 DROP CONSTRAINT IF EXISTS FK_User_Project
 GO
 
--- Drop constraint if it already exists
+-- Dropper constraint hvis den existere
 -- Table: userLogin
 -- Constraint: FK_Role_User
 ALTER TABLE dbo.transactionTable
@@ -38,32 +32,32 @@ DROP CONSTRAINT IF EXISTS FK_User_Transaction, FK_Project_Transaction
 GO
 
 
--- Drop the table if it already exists
+-- Dropper table hvis den existere
 -- Table: userPassword
 DROP TABLE IF EXISTS dbo.userPassword
 GO
 
--- Drop the table if it already exists
+-- Dropper table hvis den existere
 -- Table: userRole
 DROP TABLE IF EXISTS dbo.userRole
 GO
--- Drop the table if it already exists
+-- Dropper table hvis den existere
 -- Table: userLogin
 DROP TABLE if EXISTS dbo.userLogin
 GO
 
--- Drop the table if it already exists
+-- Dropper table hvis den existere
 -- Table: project
 DROP TABLE if EXISTS dbo.project
 GO
 
--- Drop the table if it already exists
+-- Dropper table hvis den existere
 -- Table: transactionTable
 DROP TABLE if EXISTS dbo.transactionTable
 GO
 
 
-/* --------------------------- START OF CREATING TABLES --------------------------- */
+/* --------------------------- Laver TABLES --------------------------- */
 
 
 -- CREATING USERS ROLE TABLE ("dbo.userRole") --
@@ -149,7 +143,7 @@ CREATE TABLE dbo.transactionTable
     trAdresse NVARCHAR(255) NOT NULL,
     trCity NVARCHAR(255) NOT NULL,
     trZipCode INT NOT NULL, -- INT does not work from all countries NVARCHAR burde virke
-    trCardInfo INT NOT NULL, -- google hvad man burde gøre med creditcards 
+    -- NO creditcard
     trAmount INT NOT NULL,
     trTimeSt INT NOT NULL, -- skal det være noget andet end INT? BIGINT (date time) (sql.BIGINT as datatype in the query)
     FK_userID INT NOT NULL,
