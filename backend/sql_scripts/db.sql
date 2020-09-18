@@ -1,5 +1,10 @@
-USE "1081536"
+USE "1074171"
 /* Database name */
+
+-- what should you users be able to do?
+
+-- what kind of info do we need to do these things, what shoud be shown on screen
+-- design cunstuctors for, projectObj, CommentsObj og TransactionObj
 
 /* ------------------------- START OF DROPPING TABLES ---------------------- */
 
@@ -143,10 +148,10 @@ CREATE TABLE dbo.transactionTable
     trEmail NVARCHAR(255) NOT NULL,
     trAdresse NVARCHAR(255) NOT NULL,
     trCity NVARCHAR(255) NOT NULL,
-    trZipCode INT NOT NULL,
-    trCardInfo INT NOT NULL,
+    trZipCode INT NOT NULL, -- INT does not work from all countries NVARCHAR burde virke
+    trCardInfo INT NOT NULL, -- google hvad man burde gøre med creditcards 
     trAmount INT NOT NULL,
-    trTimeSt INT NOT NULL,
+    trTimeSt INT NOT NULL, -- skal det være noget andet end INT? BIGINT (date time) (sql.BIGINT as datatype in the query)
     FK_userID INT NOT NULL,
     FK_projectID INT NOT NULL,
 
@@ -225,7 +230,8 @@ INSERT INTO dbo.transactionTable
     ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID)
 VALUES
     -- ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID),
-    ('Jens', 'Jens', 'Jens@ucn.dk', 'Gadevej 2', 'Aalborg', 9000, 12, 100, 10102010, 1, 1)
+    ('Jens', 'Jens', 'Jens@ucn.dk', 'Gadevej 2', 'Aalborg', 9000, 1234543221, 100, 20102010, 1, 1),
+    ('Hans', 'Christian', 'Andersen@ucn.dk', 'Odensevej 99', 'Odense', 4000, 123456789, 100, 10102010, 5, 3)
    
      GO
  
