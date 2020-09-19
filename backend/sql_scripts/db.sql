@@ -142,9 +142,9 @@ CREATE TABLE dbo.transactionTable
     trEmail NVARCHAR(255) NOT NULL,
     trAdresse NVARCHAR(255) NOT NULL,
     trCity NVARCHAR(255) NOT NULL,
-    trZipCode INT NOT NULL, -- INT does not work from all countries NVARCHAR burde virke
+    trZipCode INT NOT NULL, -- INT does not work from all countries NVARCHAR burde virke //vi anvender INT(fokuser på DK)
     -- NO creditcard
-    trAmount INT NOT NULL,
+    trMoney INT NOT NULL,
     trTimeSt INT NOT NULL, -- skal det være noget andet end INT? BIGINT (date time) (sql.BIGINT as datatype in the query)
     FK_userID INT NOT NULL,
     FK_projectID INT NOT NULL,
