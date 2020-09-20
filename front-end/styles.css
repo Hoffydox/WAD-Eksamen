@@ -68,6 +68,18 @@ h1 {
     border-radius: 3vw;
 }
 .info {
-    width: 25vw;
+    width: 30vw;
     float: none;
+    padding-left:6vw;
+    padding-top: 3vw;
 }
+.betaling {
+    background-color: rgb(240, 231, 228);
+    width: 30vw;
+    border: 6px solid #99F2C8;
+    border-radius: 3vw;
+    margin-top: 3vw;
+    padding:2vw;
+
+}
+
