@@ -220,11 +220,11 @@ VALUES
      GO
 
 INSERT INTO dbo.transactionTable
-    ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID)
+    (trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trMoney, trTimeSt, FK_userID, FK_projectID)
 VALUES
     -- ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID),
-    ('Jens', 'Jens', 'Jens@ucn.dk', 'Gadevej 2', 'Aalborg', 9000, 1234543221, 100, 20102010, 1, 1),
-    ('Hans', 'Christian', 'Andersen@ucn.dk', 'Odensevej 99', 'Odense', 4000, 123456789, 100, 10102010, 5, 3)
+    ('Jens', 'Jens', 'Jens@ucn.dk', 'Gadevej 2', 'Aalborg', 9000, 100, 20102010, 1, 1),
+    ('Hans', 'Christian', 'Andersen@ucn.dk', 'Odensevej 99', 'Odense', 4000, 100, 10102010, 5, 3)
    
      GO
  

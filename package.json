@@ -1,7 +1,6 @@
 {
   "name": "WAD-Eksamen",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -27,5 +26,6 @@
   "bugs": {
     "url": "https://github.com/Hoffydox/WAD-Eksamen/issues"
   },
-  "homepage": "https://github.com/Hoffydox/WAD-Eksamen#readme"
+  "homepage": "https://github.com/Hoffydox/WAD-Eksamen#readme",
+  "description": ""
 }
