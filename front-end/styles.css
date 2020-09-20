@@ -21,6 +21,9 @@ a {
     float: right;
     text-decoration: none;
     color:black; 
+    display: inline-block;
+    padding:6px;
+
 }
 .navn {
     float: left;
@@ -67,6 +70,7 @@ h1 {
     padding:2vw;
     border-radius: 3vw;
     margin-bottom: 3vw;
+    text-align: center;
 }
 .info {
     width: 30vw;
