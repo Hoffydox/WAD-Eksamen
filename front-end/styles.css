@@ -43,8 +43,17 @@ a {
     ;
 }
 
-.projekt {
+.projekter {
     column-count: 3; 
     margin: 4vw;
+    margin-left: 17vw;
 }
 
+h1 {
+    text-align: center;
+    font-size: 2.4vw;
+}
+.overskrift {
+    margin-top: 4vw;
+    margin-bottom: 3vw;
+}
