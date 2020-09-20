@@ -57,3 +57,17 @@ h1 {
     margin-top: 4vw;
     margin-bottom: 3vw;
 }
+
+/*opret side*/
+.opret {
+    margin-top: 6vw;
+    margin-left: 35vw;
+    border: 6px solid #99F2C8;
+    width: 30vw;
+    padding:2vw;
+    border-radius: 3vw;
+}
+.info {
+    width: 25vw;
+    float: none;
+}
