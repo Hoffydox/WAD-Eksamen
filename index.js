@@ -5,7 +5,7 @@ const users = require('./routes/users');
 const setJSON = require('./middleware/setResponseHeaderToJSON');
 
 const app = express();
-const myPort = 8171;
+const myPort = 8536;
 
 app.use(cors());
 app.use(setJSON);
