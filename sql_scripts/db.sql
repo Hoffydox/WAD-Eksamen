@@ -3,6 +3,24 @@ USE "1081536"
 
 /* ------------------------- START OF DROPPING TABLES ---------------------- */
 
+-- Drop constraint if it already exists
+-- Table: userLoginRole
+-- Constraint: FK_UserRole_User, FK_UserRole_Role
+ALTER TABLE dbo.userLoginRole
+DROP CONSTRAINT IF EXISTS FK_UserRole_User
+GO
+ALTER TABLE dbo.userLoginRole
+DROP CONSTRAINT IF EXISTS FK_UserRole_Role
+GO
+
+-- Dropper constraint hvis den existere
+-- Table: userLogin
+-- Constraint: FK_Role_User
+/*ALTER TABLE dbo.userLogin
+DROP CONSTRAINT IF EXISTS FK_Role_User
+GO
+*/
+
 -- Dropper constraint hvis den existere
 -- Table: userPassword
 -- Constraint: FK_Password_User
@@ -10,12 +28,7 @@ ALTER TABLE dbo.userPassword
 DROP CONSTRAINT IF EXISTS FK_Password_User
 GO
 
--- Dropper constraint hvis den existere
--- Table: userLogin
--- Constraint: FK_Role_User
-ALTER TABLE dbo.userLogin
-DROP CONSTRAINT IF EXISTS FK_Role_User
-GO
+
 
 -- Dropper constraint hvis den existere
 -- Table: userLogin
@@ -56,33 +69,50 @@ GO
 DROP TABLE if EXISTS dbo.transactionTable
 GO
 
+-- Drop the table if it already exists
+-- Table: userLoginRole
+DROP TABLE if EXISTS dbo.userLoginRole
+GO
 
 /* --------------------------- Laver TABLES --------------------------- */
 
 
--- CREATING USERS ROLE TABLE ("dbo.userRole") --
-CREATE TABLE dbo.userRole
+CREATE TABLE userLogin
 (
-    roleID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    roleName NVARCHAR(255) NOT NULL,
-    roleDescription NVARCHAR(MAX) NOT NULL
+    userID INT IDENTITY (1,1) NOT NULL,
+    userEmail NVARCHAR (255) NOT NULL,
+    userFirstName NVARCHAR (50) NOT NULL,
+    userLastName NVARCHAR (50) NOT NULL,
+    userPassword NVARCHAR (255) NOT NULL,
+
+    PRIMARY KEY (userID)
+);
+        GO
+
+-- CREATING USERS ROLE TABLE ("dbo.userRole") --
+CREATE TABLE userRole
+(
+    roleID INT IDENTITY (1,1) NOT NULL,
+    roleName NVARCHAR (255) NOT NULL,
+    roleDescription NVARCHAR(MAX) NOT NULL,
     -- This is only shown in the DB itself and is not used in any other way (unless you make a view of it)
+    PRIMARY KEY (roleID)
+
 );
         GO
 --//
 -- CREATING USER TABLE ("dbo.userLogin") --
-CREATE TABLE dbo.userLogin
+
+
+CREATE TABLE userLoginRole
 (
-    userID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    userEmail NVARCHAR(255) NOT NULL,
-    userFirstName NVARCHAR(50) NOT NULL,
-    userLastName NVARCHAR(50) NOT NULL,
+    FK_userID INT NOT NULL,
     FK_roleID INT NOT NULL,
 
-    CONSTRAINT FK_Role_User FOREIGN KEY (FK_roleID) REFERENCES dbo.userRole (roleID)
-);
+    CONSTRAINT FK_UserRole_User FOREIGN KEY (FK_userID) REFERENCES userLogin(userID),
+    CONSTRAINT FK_UserRole_Role FOREIGN KEY (FK_roleID) REFERENCES userRole(roleID)
+); 
         GO
-
 -- CREATING THIRD CONJUNCTION TABLE ("dbo.userLoginRole")
 /* many to many relationship mellem userRole og userLogin
         CREATE TABLE dbo.userLoginRole
@@ -95,12 +125,12 @@ CREATE TABLE dbo.userLogin
         */
 
 -- CREATING USERS PASSWORD TABLE ("dbo.userPassword") --
-CREATE TABLE dbo.userPassword
+CREATE TABLE userPassword
 (
     FK_userID INT NOT NULL,
-    userHashedPassword NVARCHAR(255) NOT NULL,
+    hashedPassword NVARCHAR (255) NOT NULL,
 
-    CONSTRAINT FK_Password_User FOREIGN KEY (FK_userID) REFERENCES dbo.userLogin (userID)
+    CONSTRAINT FK_Password_User FOREIGN KEY (FK_userID) REFERENCES userLogin(userID)
 );
         GO
 
@@ -116,48 +146,51 @@ CREATE TABLE dbo.userPassword
         */
 
 -- project table
-CREATE TABLE dbo.project
-(            
+CREATE TABLE project
+(
     projectID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
     projectName NVARCHAR(255) NOT NULL,
     projectDescription NVARCHAR(255) NOT NULL,
-    projectGoal INT NOT NULL, 
-    projectPicture NVARCHAR(255) NOT NULL, 
+    projectGoal INT NOT NULL,
+    projectPicture NVARCHAR(255) NOT NULL,
     projectTimeLimit INT NOT NULL,
     FK_userID INT NOT NULL
-    --projectComments 
-    -- projectBenefits 
+        --projectComments 
+        -- projectBenefits 
 
-    CONSTRAINT FK_User_Project FOREIGN KEY (FK_userID) REFERENCES dbo.userLogin (userID)
+        CONSTRAINT FK_User_Project FOREIGN KEY (FK_userID) REFERENCES userLogin(userID)
 );
         GO
 
 -- transaction table
-CREATE TABLE dbo.transactionTable
+CREATE TABLE transactionTable
 (
     transactionID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    trFirstName NVARCHAR(255) NOT NULL, --NOT NULL * det skal udfyldes
+    trFirstName NVARCHAR(255) NOT NULL,
+    --NOT NULL * det skal udfyldes
     trLastName NVARCHAR(255) NOT NULL,
     trEmail NVARCHAR(255) NOT NULL,
     trAdresse NVARCHAR(255) NOT NULL,
     trCity NVARCHAR(255) NOT NULL,
-    trZipCode INT NOT NULL, -- INT does not work from all countries NVARCHAR burde virke //vi anvender INT(fokuser på DK)
+    trZipCode INT NOT NULL,
+    -- INT does not work from all countries NVARCHAR burde virke //vi anvender INT(fokuser på DK)
     -- NO creditcard
     trMoney INT NOT NULL,
-    trTimeSt INT NOT NULL, -- skal det være noget andet end INT? BIGINT (date time) (sql.BIGINT as datatype in the query)
+    trTimeSt INT NOT NULL,
+    -- skal det være noget andet end INT? BIGINT (date time) (sql.BIGINT as datatype in the query)
     FK_userID INT NOT NULL,
     FK_projectID INT NOT NULL,
 
 
-    CONSTRAINT FK_User_Transaction FOREIGN KEY (FK_userID) REFERENCES dbo.userLogin (userID),
-    CONSTRAINT FK_Project_Transaction FOREIGN KEY (FK_projectID) REFERENCES dbo.project (projectID)
+    CONSTRAINT FK_User_Transaction FOREIGN KEY (FK_userID) REFERENCES userLogin(userID),
+    CONSTRAINT FK_Project_Transaction FOREIGN KEY (FK_projectID) REFERENCES project(projectID)
 );
         GO
 
 
 
-    
-    
+
+
 
 
 --//
@@ -166,7 +199,7 @@ CREATE TABLE dbo.transactionTable
 /* --------------------------- START OF POPULATING TABLES WITH DATA --------------------------- */
 
 -- INSERTING DATA IN THE USER ROLES TABLE ("dbo.userRole")
-INSERT INTO dbo.userRole
+INSERT INTO userRole
     (roleName, roleDescription)
 VALUES
     ('Super Administrator', 'This role has the most privileges; as super admin you can have access to the entire website and network administration features, you may add or delete websites within the network and perfo network-wide operations.'),
@@ -178,25 +211,35 @@ VALUES
         GO
 --//
 
-INSERT INTO dbo.userLogin
-    (userEmail, userFirstName, userLastName, FK_roleID)
+INSERT INTO userLogin
+    (userEmail, userFirstName, userLastName, userPassword)
 VALUES
-    ('admin@db.dk', 'Andreas', 'Hoffmann', 1),
-    ('miniadmin@db.dk', 'Gunther', 'Gnyt', 2),
-    ('Editor@db.dk', 'Gimli', 'Gammel', 3),
-    ('author@db.dk', 'Legolas', 'Jensen', 4),
-    ('contributor@db.dk', 'Gustav', 'Augusta', 5),
-    ('member@db.dk', 'Gammel', 'Far', 6)
+    ('admin@db.dk', 'Andreas', 'Hoffmann', 'password1'),
+    ('miniadmin@db.dk', 'Gunther', 'Gnyt', 'password2'),
+    ('Editor@db.dk', 'Gimli', 'Gammel', 'password3'),
+    ('author@db.dk', 'Legolas', 'Jensen', 'password4'),
+    ('contributor@db.dk', 'Gustav', 'Augusta', 'password5'),
+    ('member@db.dk', 'Gammel', 'Far', 'password6'),
+    ('1234@hotmail.com', 'Random', 'Dude', 'password7')
         GO
 
-INSERT INTO dbo.userLogin
-    (userEmail, userFirstName, userLastName, FK_roleID)
+INSERT INTO userLoginRole
+    (FK_userID, FK_roleID)
 VALUES
-    ('1234@hotmail.com', 'Random', 'Dude', 6)
-        GO
+    (1, 1),-- Admin
+    (2, 6),
+    (3, 6),
+    (4, 6),
+    (5, 6),
+    (6, 6),
+    (7, 6) 
+GO
 
-INSERT INTO dbo.userPassword
-    (FK_userID, userHashedPassword)
+ 
+
+
+INSERT INTO userPassword
+    (FK_userID, hashedPassword)
 VALUES
     (1, 'adminPassword'),
     (2, 'GuntherPassword'),
@@ -207,19 +250,22 @@ VALUES
     (7, 'RandomPassword')
         GO
 
-INSERT INTO dbo.project
-    (projectName, projectDescription, projectGoal,  projectPicture,  projectTimeLimit, FK_userID)
+
+
+
+INSERT INTO project
+    (projectName, projectDescription, projectGoal, projectPicture, projectTimeLimit, FK_userID)
 VALUES
     -- ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID),
     ('Cats', 'Et projekt om katte', 20000, 'billede', 5, 1),
     ('cars', 'Et projekt om biler', 50000, 'billede', 7, 3),
     ('Lamper', 'Et projekt om lamper', 22000, 'billede', 4, 2),
-    ('Kræftens bekæmpelse', 'Et projekt om støtte til kræftens bekæmpelse', 1000000,'billede', 8, 3),
+    ('Kræftens bekæmpelse', 'Et projekt om støtte til kræftens bekæmpelse', 1000000, 'billede', 8, 3),
     ('Hunde', 'Et projekt om hunde', 51000, 'billede', 3, 4)
 
      GO
 
-INSERT INTO dbo.transactionTable
+INSERT INTO transactionTable
     (trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trMoney, trTimeSt, FK_userID, FK_projectID)
 VALUES
     -- ( trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trCardInfo, trAmount, trTimeSt, FK_userID, FK_projectID),
@@ -228,6 +274,18 @@ VALUES
    
      GO
  
+
+ SELECT *
+    FROM userLogin
+    INNER JOIN userLoginRole
+    ON userID = FK_userID
+    GO
+
+    SELECT *
+    FROM userLogin
+    LEFT JOIN userPassword
+    ON userID = FK_userID
+    GO
 /* --------------------------- END OF POPULATING TABLES WITH DATA  --------------------------- */
 
 /* --------------------- START SELECTING DATA FROM THE DATABASE --------------------------- */
