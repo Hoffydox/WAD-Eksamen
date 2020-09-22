@@ -149,7 +149,7 @@ CREATE TABLE userPassword
 CREATE TABLE project
 (
     projectID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
-    projectName NVARCHAR(255) NOT NULL,
+    projectName NVARCHAR(50) NOT NULL,
     projectDescription NVARCHAR(255) NOT NULL,
     projectGoal INT NOT NULL,
     projectPicture NVARCHAR(255) NOT NULL,

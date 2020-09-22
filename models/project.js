@@ -6,18 +6,46 @@ const crypt = require('../config/encrypt');
 
 
 
-class User {
+class project {
     // constructor
-    constructor(userObj) {
-        this.userId = userObj.userId;
-        this.userEmail = userObj.userEmail;
-        this.userFirstName = userObj.userFirstName;
-        this.userLastName = userObj.userLastName;
-        // add info about the user's role --> role object
-        if (userObj.role) {
-            this.role = {}
-            this.role.roleId = userObj.role.roleId;
-            this.role.roleName = userObj.role.roleName;
-        }
+    constructor(projectObj) {
+        this.projectId = projectObj.projectId;
+        this.projectName = projectObj.projectName;
+        this.projectDescription = projectObj.projectDescription;
+        this.projectGoal = projectObj.projectGoal;
+        this.projectPicture = projectObj.projectPicture;
+        this.projectTimeLimit = projectObj.projectTimeLimit;
+    }
+
+    static validate(projectObj) {
+        const schema = Joi.object({
+            projectId: Joi.number()
+                .integer()
+                .min(1),
+            projectName: Joi.string()
+                .max(50),
+            projectDescription: Joi.string()
+                .max(255),
+                projectGoal: Joi.number()
+                .integer
+                .min(10),
+                projectPicture: Joi.string()
+                .max(255),
+                projectTimeLimit: Joi.number()
+                .integer
+                .min(1)
+        });
+
+        return schema.validate(projectObj);
     }
 }
+module.exports = project;
+
+/*
+projectID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
+    projectName NVARCHAR(255) NOT NULL,
+    projectDescription NVARCHAR(255) NOT NULL,
+    projectGoal INT NOT NULL,
+    projectPicture NVARCHAR(255) NOT NULL,
+    projectTimeLimit INT NOT NULL,
+FK_projectID INT NOT NULL */
