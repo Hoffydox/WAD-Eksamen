@@ -1,4 +1,4 @@
-USE "1081536"
+USE "1074171"
 
 
 /* ------------------------- START OF DROPPING TABLES ---------------------- */
@@ -202,12 +202,12 @@ CREATE TABLE transactionTable
 INSERT INTO userRole
     (roleName, roleDescription)
 VALUES
-    ('Super Administrator', 'This role has the most privileges; as super admin you can have access to the entire website and network administration features, you may add or delete websites within the network and perfo network-wide operations.'),
-    ('Administrator', 'The Administrator is regarded as the most powerful of the five default users - This role is defined when the Administrator, (known as Admin) user role is created during the installation. - The Admin is the only user with peission to create new users, and modify and delete existing ones. As an Admin, you have access to all administration features such as adding, deleting and editing infoation from all other users and have complete control over site content. The Admin is the only user with peission to create new users, and modify and delete existing ones. As an Admin, you have access to all administration features such as adding, deleting and editing infoation from all other users and have complete control over site content. An Admin may add, delete and modify themes, plugins and core settings at any time.'),
-    ('Editor', 'As you’d expect from an editor, the Editor role holds the highest position in overseeing a websites content. The only role higher than the Editor regarding privileges is the Admin, who can perfo site management tasks as well as manage and delete content as per this role. Users assigned the Editor role have total control over website content, their rights mean they can manage posts such as write, edit and publish and have the power to delete their own posts and pages, this includes those written by anyone else. The Editor can also view comments and moderate, alter, and delete them as they see fit. - An Editors rights go beyond content management. They may also manage categories add or delete tags and even upload files. Aside from having open access to all content related aspects of your site, the Editor wont have access to your sites settings, plugins or users.'),
-    ('Author', 'Users with the Author role have complete control over their content, they may add, edit, publish and delete their own posts and upload images. They can also edit and delete their profile. Authors have no access to content produced by other users. They are also blocked from creating categories or doing anything to the pages on a site. - This role isnt used much in practice since Authors can delete their published posts and images, and edit their own published articles, which could cause problems for site owners. If you plan a website with multiple Authors, you might want to consider the Contributor role.'),
-    ('Contributor', 'The Contributor role is a restricted version of the author role. A user with this role can write new posts and edit existing posts but cant publish or delete them once they are published. A Contributor submits their work for review by an Editor or an Admin before its published. Its worth noting that Contributors cant access the media library which means they cant upload images to their posts without assistance. - This role is a good choice when you want to allow other people to write for your website since they can’t access any of the features of the admin user role such as altering your site’s design, uploading or removing plugins or creating new categories. They can, however, use existing categories to add tags to their posts. A Contributor may view comments, even those which are in moderation but, they can’t modify, approve or delete them.'),
-    ('Subscriber', 'The Subscriber is the default role for new site users, and it has the fewest peissions. If this role stays with the default capabilities, it is the most limited of all the user roles. A Subscriber can create a profile on a website, read its content and post comments. They have no access to any site settings and cant create or amend any content.')
+    ('Super Administrator', 'The super Admin has absolute control over the site.'),
+    ('Administrator', 'Admins have full power over the site, except when it comes to banning or deleting other admins or the super admin'),
+    ('Editor', 'Editors are for maintaining the website. Editors can edit comments, and projects. (And possibly flag users.)'),
+    ('Creator', 'Users who have made 1 or more projects are Creators.'),
+    ('Member', 'Members are userser who is logged in and is registered in the database.'),
+    ('Visitor', 'Visitors, is users who has not created a login or is not logged in')
         GO
 --//
 
