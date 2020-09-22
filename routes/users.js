@@ -20,11 +20,11 @@ router.post('/', async (req, res) => {
     // otherwise respond with statuscode (for now: teapot) and error
     const userWannabe = _.omit(req.body, 'password');
     const passwordWannabe = _.pick(req.body, 'password');
-
+    console.log("line 23");
     try {
         const validateUser = User.validate(userWannabe);
         if (validateUser.error) throw { statusCode: 400, message: validateUser.error };
-
+        console.log("line 27");
         const validatePassword = User.validateLoginInfo(passwordWannabe);
         if (validatePassword.error) throw { statusCode: 400, message: validatePassword.error };
 
@@ -55,7 +55,17 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/protected', [auth, admin], async (req, res) => {
+// what endpoints do we need?
+// who should have access to what?
+// if you create a project should be allowed
+// is the currently logged in user allowed to see this specific thing
+
+// order of things:
+// what do you want from the system?
+// endpoints
+// delete (flag?)
+
+router.get('/protected', [auth, admin], async (req, res) => { // auth checks token // admin checks for at least admin role status
     // res.setHeader('Content-Type', 'application/json');
 
     // let's check the req header if the token exists there, that proves the identity of the user

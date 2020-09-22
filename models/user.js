@@ -4,11 +4,15 @@ const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 const crypt = require('../config/encrypt');
 
+
+
 class User {
     // constructor
     constructor(userObj) {
         this.userId = userObj.userId;
         this.userEmail = userObj.userEmail;
+        this.userFirstName = userObj.userFirstName;
+        this.userLastName = userObj.userLastName;
         // add info about the user's role --> role object
         if (userObj.role) {
             this.role = {}
@@ -26,6 +30,10 @@ class User {
             userEmail: Joi.string()
                 .email()
                 .max(255),
+            userFirstName: Joi.string()
+                .max(50),
+            userLastName: Joi.string()
+                .max(50),
             // add info about the user's role --> role object     
             role: Joi.object({
                 roleId: Joi.number()
@@ -98,6 +106,8 @@ class User {
                     const record = {
                         userId: result.recordset[0].userID,
                         userEmail: result.recordset[0].userEmail,
+                        userFirstName: result.recordset[0].userFirstName, // userFirstName userLastName
+                        userLastName: result.recordset[0].userLastName, //  userLastName: result.userLastName ???
                         role: {
                             roleId: result.recordset[0].roleID,
                             roleName: result.recordset[0].roleName
@@ -144,6 +154,7 @@ class User {
                     const pool = await sql.connect(con);
                     const result = await pool.request()
                         .input('userEmail', sql.NVarChar(255), email)
+
                         .query('SELECT * FROM userLogin WHERE userEmail = @userEmail');
                     console.log(result);
                     if (result.recordset.length == 0) throw { statusCode: 404, message: 'User not found.' };
@@ -151,7 +162,9 @@ class User {
 
                     const userWannabe = {
                         userId: result.recordset[0].userID,
-                        userEmail: result.recordset[0].userEmail
+                        userEmail: result.recordset[0].userEmail,
+                        userFirstName: result.recordset[0].userFirstName,
+                        userLastName: result.recordset[0].userLastName
                     }
 
                     const { error } = User.validate(userWannabe);
@@ -206,9 +219,13 @@ class User {
                     const pool = await sql.connect(con);
                     const result1 = await pool.request()
                         .input('userEmail', sql.NVarChar(255), this.userEmail)
+
+                        .input('userFirstName', sql.NVarChar(50), this.userFirstName)
+                        .input('userLastName', sql.NVarChar(50), this.userLastName)
+
                         .input('rawPassword', sql.NVarChar(255), optionsObj.password)
                         .input('hashedPassword', sql.NVarChar(255), hashedPassword)
-                        .query(`INSERT INTO userLogin (userEmail, userPassword) VALUES (@userEmail, @rawPassword);
+                        .query(`INSERT INTO userLogin (userEmail, userFirstName, userLastName, userPassword) VALUES (@userEmail, @userFirstName, @userLastName, @rawPassword);
                                 SELECT userID, userEmail FROM userLogin WHERE userID = SCOPE_IDENTITY();
                                 INSERT INTO userPassword (FK_userID, hashedPassword) VALUES (SCOPE_IDENTITY(), @hashedPassword)`);
                     console.log(result1);
@@ -218,7 +235,7 @@ class User {
                     const result2 = await pool.request()
                         .input('userID', sql.Int, result1.recordset[0].userID)
                         .query(`INSERT INTO userLoginRole (FK_userID, FK_roleID)
-                                VALUES (@userID, 1);
+                                VALUES (@userID, 2);
                                 SELECT * FROM userLoginRole INNER JOIN userRole
                                 ON userLoginRole.FK_roleID = userRole.roleID
                                 WHERE userLoginRole.FK_userID = @userID`);
@@ -228,6 +245,8 @@ class User {
                     const record = {
                         userId: result1.recordset[0].userID,
                         userEmail: result1.recordset[0].userEmail,
+                        userFirstName: result1.recordset[0].userFirstName,
+                        userLastName: result1.recordset[0].userLastName,
                         role: {
                             roleId: result2.recordset[0].roleID,
                             roleName: result2.recordset[0].roleName
@@ -292,6 +311,8 @@ class User {
                     const userWannabe = {
                         userId: result.recordset[0].userID,
                         userEmail: result.recordset[0].userEmail,
+                        userFirstName: result.recordset[0].userFirstName, // userFirstName userLastName
+                        userLastName: result.recordset[0].userLastName,
                         role: {
                             roleId: result.recordset[0].roleID,
                             roleName: result.recordset[0].roleName
@@ -302,7 +323,6 @@ class User {
                     if (error) throw { statusCode: 409, message: error };
 
                     resolve(new User(userWannabe));
-
                 }
                 catch (err) {
                     console.log(err);
@@ -367,6 +387,8 @@ class User {
                     const userWannabe = {
                         userId: result.recordset[0].userID,
                         userEmail: result.recordset[0].userEmail,
+                        userFirstName: result.recordset[0].userFirstName,
+                        userLastName: result.recordset[0].userLastName,
                         role: {
                             roleId: result.recordset[0].roleID,
                             roleName: result.recordset[0].roleName
