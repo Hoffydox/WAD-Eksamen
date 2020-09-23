@@ -27,18 +27,18 @@ class Project {
                 .max(50),
             projectDescription: Joi.string()
                 .max(255),
-                projectGoal: Joi.number()
+            projectGoal: Joi.number()
                 .integer
                 .min(1),
-                projectPicture: Joi.string()
+            projectPicture: Joi.string()
                 .max(255),
-                projectTimeLimit: Joi.number()
+            projectTimeLimit: Joi.number()
                 .integer
                 .min(1)
         });
         console.log("her 2");
         return schema.validate(projectObj);
-        
+
     }
 
 
@@ -67,23 +67,21 @@ class Project {
                 // if error, reject with error
                 // CLOSE THE CONNECTION TO DB
                 try {
-                  
-               
+
+
 
                     const pool = await sql.connect(con);
                     const result1 = await pool.request()
                         .input('projectName', sql.NVarChar(50), this.projectName)
                         .input('projectDescription', sql.NVarChar(255), this.projectDescription)
-                        .input('projectGoal', sql.number(), this.projectGoal)
+                        .input('projectGoal', sql.INT(), this.projectGoal) // sql.INT or sql.number????? Gery?
                         .input('projectPicture', sql.NVarChar(255), this.projectPicture)
-                        .input('projectTimeLimit', sql.number(), this.projectTimeLimit)
+                        .input('projectTimeLimit', sql.INT(), this.projectTimeLimit)
 
-                        .query(`INSERT INTO userLogin (userEmail, userFirstName, userLastName, userPassword) 
-                                VALUES (@, @userFirstName, @userLastName, @rawPassword);`);
+                      /* semi kolon for enden???*/  .query(`INSERT INTO project (projectName, projectDescription, projectGoal, projectPicture, projectTimeLimit) 
+                                VALUES (@projectName, @projectDescription, @projectGoal, @projectPicture, @projectTimeLimit)`);
                     console.log(result1);
                     if (result1.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' };
-
-                    
                     /*
                     const result2 = await pool.request()
                         .input('userID', sql.Int, result1.recordset[0].userID)
@@ -96,31 +94,18 @@ class Project {
                     console.log(result2);
                     if (result2.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' }; 
                     */
-
-
-                     /*
-
-                    projectName
-                    projectDescription
-                    projectGoal
-                    projectPicture
-                    projectTimeLimit
-
-                    */
-
-
                     const record = {
                         projectId: result1.recordset[0].projectID,
                         projectName: result1.recordset[0].projectName,
                         projectDescription: result1.recordset[0].projectDescription,
                         projectPicture: result1.recordset[0].projectPicture,
                         projectTimeLimit: result1.recordset[0].projectTimeLimit
-                       /*
-                            role: {
-                            roleId: result2.recordset[0].roleID,
-                            roleName: result2.recordset[0].roleName
-                        }
-                        */
+                        /*
+                             role: {
+                             roleId: result2.recordset[0].roleID,
+                             roleName: result2.recordset[0].roleName
+                         }
+                         */
                     }
 
                     const { error } = Project.validate(record);

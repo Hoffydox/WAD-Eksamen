@@ -287,6 +287,7 @@ VALUES
     LEFT JOIN userPassword
     ON userID = FK_userID
     GO
+
 /* --------------------------- END OF POPULATING TABLES WITH DATA  --------------------------- */
 
 /* --------------------- START SELECTING DATA FROM THE DATABASE --------------------------- */

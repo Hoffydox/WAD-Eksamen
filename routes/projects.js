@@ -3,8 +3,8 @@ const Project = require('../models/project');
 const router = express.Router();
 const _ = require('lodash');
 // const { project } = require('../config/connection');
-const auth = require('../middleware/authenticate');
-const admin = require('../middleware/admin');
+// const auth = require('../middleware/authenticate');
+// const admin = require('../middleware/admin');
 
 
 
@@ -24,12 +24,10 @@ router.post('/', async (req, res) => {
     console.log(req.body);
     
     const projectWannabe = req.body;
-    console.log("line 26");
     
     try {
         console.log("line 28");
         const validateProject = Project.validate(projectWannabe);
-        console.log("line 30");
         if (validateProject.error) throw { statusCode: 400, message: validateProject.error };
         console.log("line 32");
 
@@ -44,6 +42,7 @@ router.post('/', async (req, res) => {
             const newProject = await new Project(projectWannabe).create(projectWannabe); // hvad skal der være her?
             console.log(newProject);
             res.send(JSON.stringify(newProject));
+            
         }
         catch (err) {
             let errorMessage;
