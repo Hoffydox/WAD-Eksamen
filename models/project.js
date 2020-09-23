@@ -26,12 +26,12 @@ class Project {
                 .max(50),
             projectDescription: Joi.string()
                 .max(255),
-                projectGoal: Joi.number()
+            projectGoal: Joi.number()
                 .integer
                 .min(10),
-                projectPicture: Joi.string()
+            projectPicture: Joi.string()
                 .max(255),
-                projectTimeLimit: Joi.number()
+            projectTimeLimit: Joi.number()
                 .integer
                 .min(1)
         });
@@ -65,8 +65,8 @@ class Project {
                 // if error, reject with error
                 // CLOSE THE CONNECTION TO DB
                 try {
-                  
-               
+
+
 
                     const pool = await sql.connect(con);
                     const result1 = await pool.request()
@@ -81,7 +81,7 @@ class Project {
                     console.log(result1);
                     if (result1.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' };
 
-                    
+
                     /*
                     const result2 = await pool.request()
                         .input('userID', sql.Int, result1.recordset[0].userID)
@@ -96,15 +96,15 @@ class Project {
                     */
 
 
-                     /*
+                    /*
 
-                    projectName
-                    projectDescription
-                    projectGoal
-                    projectPicture
-                    projectTimeLimit
+                   projectName
+                   projectDescription
+                   projectGoal
+                   projectPicture
+                   projectTimeLimit
 
-                    */
+                   */
 
 
                     const record = {
@@ -112,13 +112,13 @@ class Project {
                         projectName: result1.recordset[0].projectName,
                         projectDescription: result1.recordset[0].projectDescription,
                         projectPicture: result1.recordset[0].projectPicture,
-                        projectTimeLimit: result1.recordset[0].projectTimeLimit,
-                       /*
-                            role: {
-                            roleId: result2.recordset[0].roleID,
-                            roleName: result2.recordset[0].roleName
-                        }
-                        */
+                        projectTimeLimit: result1.recordset[0].projectTimeLimit
+                        /*
+                             role: {
+                             roleId: result2.recordset[0].roleID,
+                             roleName: result2.recordset[0].roleName
+                         }
+                         */
                     }
 
                     const { error } = Project.validate(record);
@@ -143,6 +143,60 @@ class Project {
             })();
         });
     }
+
+    static readByName(name) {
+        return new Promise((resolve, reject) => {
+            (async () => {
+                // connect to DB
+                // query: select * from userLogin where userEmail = email
+                // check the result, we should have either 1 or no result
+                //  --> if no result: user is not found
+                //  --> if more results: corrupt DB
+                // create a new projectWannabe object and validate (can it be a user?)
+                // if all good, resolve with new user based on projectWannabe
+                // if error, reject with error
+                // CLOSE THE CONNECTION TO DB
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                        .input('projectName', sql.NVarChar(50), name)
+
+                        .query('SELECT * FROM project WHERE projectName = @projectName');
+                    console.log(result);
+                    if (result.recordset.length == 0) throw { statusCode: 404, message: 'Project not found.' };
+                    if (result.recordset.length > 1) throw { statusCode: 500, message: 'Database is corrupt.' };
+
+                    const projectWannabe = {
+                        projectId: result.recordset[0].projectID,
+                        projectName: result.recordset[0].projectName,
+                        projectDescription: result.recordset[0].projectDescription,
+                        projectPicture: result.recordset[0].projectPicture,
+                        projectTimeLimit: result.recordset[0].projectTimeLimit
+                    }
+
+                    const { error } = Project.validate(projectWannabe);
+                    if (error) throw { statusCode: 409, message: error };
+
+                    resolve(new Project(projectWannabe));
+                }
+                catch (err) {
+                    console.log(err);
+                    let errorMessage;
+                    if (!err.statusCode) {
+                        errorMessage = {
+                            statusCode: 500,
+                            message: err
+                        }
+                    } else {
+                        errorMessage = err;
+                    }
+                    reject(errorMessage);
+                }
+                sql.close();
+            })();
+        });
+    }
+
 
 }
 module.exports = Project;
