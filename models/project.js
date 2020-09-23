@@ -6,7 +6,7 @@ const crypt = require('../config/encrypt');
 
 
 
-class project {
+class Project {
     // constructor
     constructor(projectObj) {
         this.projectId = projectObj.projectId;
@@ -41,10 +41,10 @@ class project {
 
 
 
-    // create(optionsObj) :: optionsObj {password: '13212j3k2j1', ...}
+    // create(projectOptionsObj) :: projectOptionsObj {password: '13212j3k2j1', ...}
     // const user = new User(userData);
-    // user.create(optionsObj);
-    create(optionsObj) {
+    // user.create(projectOptionsObj);
+    create(projectOptionsObj) {
         return new Promise((resolve, reject) => {
             (async () => {
                 //// this will be handled on route-handler level:
@@ -52,7 +52,7 @@ class project {
                 ////      --> if exists, then terminate create method, may not add the same user again
                 ////      --> if doesnt exist then carry on
 
-                // make hashPassword from optionsObj.password
+                // make hashPassword from projectOptionsObj.password
                 // connect to the DB
                 // make a query to insert user into userLogin table
                 //      insert the hashedPassword into the password table with the user's key :: SCOPE_IDENTITY()
@@ -65,24 +65,24 @@ class project {
                 // if error, reject with error
                 // CLOSE THE CONNECTION TO DB
                 try {
-                    const hashedPassword = await bcrypt.hash(optionsObj.password, crypt.saltRounds);
+                  
+               
 
                     const pool = await sql.connect(con);
                     const result1 = await pool.request()
-                        .input('userEmail', sql.NVarChar(255), this.userEmail)
+                        .input('projectName', sql.NVarChar(50), this.projectName)
+                        .input('projectDescription', sql.NVarChar(255), this.projectDescription)
+                        .input('projectGoal', sql.number(), this.projectGoal)
+                        .input('projectPicture', sql.NVarChar(255), this.projectPicture)
+                        .input('projectTimeLimit', sql.number(), this.projectTimeLimit)
 
-                        .input('userFirstName', sql.NVarChar(50), this.userFirstName)
-                        .input('userLastName', sql.NVarChar(50), this.userLastName)
-
-                        .input('rawPassword', sql.NVarChar(255), optionsObj.password)
-                        .input('hashedPassword', sql.NVarChar(255), hashedPassword)
-                        .query(`INSERT INTO userLogin (userEmail, userFirstName, userLastName, userPassword) VALUES (@userEmail, @userFirstName, @userLastName, @rawPassword);
-                                SELECT userID, userEmail FROM userLogin WHERE userID = SCOPE_IDENTITY();
-                                INSERT INTO userPassword (FK_userID, hashedPassword) VALUES (SCOPE_IDENTITY(), @hashedPassword)`);
+                        .query(`INSERT INTO userLogin (userEmail, userFirstName, userLastName, userPassword) 
+                                VALUES (@, @userFirstName, @userLastName, @rawPassword);`);
                     console.log(result1);
                     if (result1.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' };
 
-                    // changed the default role to admin roleId = 1 for easier testing purposes for now
+                    
+                    /*
                     const result2 = await pool.request()
                         .input('userID', sql.Int, result1.recordset[0].userID)
                         .query(`INSERT INTO userLoginRole (FK_userID, FK_roleID)
@@ -90,24 +90,41 @@ class project {
                                 SELECT * FROM userLoginRole INNER JOIN userRole
                                 ON userLoginRole.FK_roleID = userRole.roleID
                                 WHERE userLoginRole.FK_userID = @userID`);
+                    
                     console.log(result2);
-                    if (result2.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' };
+                    if (result2.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' }; 
+                    */
+
+
+                     /*
+
+                    projectName
+                    projectDescription
+                    projectGoal
+                    projectPicture
+                    projectTimeLimit
+
+                    */
+
 
                     const record = {
-                        userId: result1.recordset[0].userID,
-                        userEmail: result1.recordset[0].userEmail,
-                        userFirstName: result1.recordset[0].userFirstName,
-                        userLastName: result1.recordset[0].userLastName,
-                        role: {
+                        projectId: result1.recordset[0].projectID,
+                        projectName: result1.recordset[0].projectName,
+                        projectDescription: result1.recordset[0].projectDescription,
+                        projectPicture: result1.recordset[0].projectPicture,
+                        projectTimeLimit: result1.recordset[0].projectTimeLimit,
+                       /*
+                            role: {
                             roleId: result2.recordset[0].roleID,
                             roleName: result2.recordset[0].roleName
                         }
+                        */
                     }
 
-                    const { error } = User.validate(record);
+                    const { error } = Project.validate(record);
                     if (error) throw { statusCode: 409, message: error };
 
-                    resolve(new User(record));
+                    resolve(new Project(record));
                 }
                 catch (err) {
                     console.log(err);
@@ -128,7 +145,7 @@ class project {
     }
 
 }
-module.exports = project;
+module.exports = Project;
 
 /*
 projectID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
