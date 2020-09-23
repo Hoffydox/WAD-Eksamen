@@ -6,6 +6,8 @@ const _ = require('lodash');
 const auth = require('../middleware/authenticate');
 const admin = require('../middleware/admin');
 
+
+// lav en ny bruger
 router.post('/', async (req, res) => {
     // res.setHeader('Content-Type', 'application/json');
 

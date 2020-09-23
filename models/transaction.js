@@ -23,7 +23,6 @@ class transaction {
         this.transactionMoney = transactionObj.transactionMoney;
         this.transactionTimeSt = transactionObj.transactionTimeSt;
 
-
     }
 
     static validate(transactionObj) {
