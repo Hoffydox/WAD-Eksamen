@@ -21,10 +21,11 @@ router.post('/', async (req, res) => {
     // if all good, we send the new project back with the response
     // catch:
     // otherwise respond with statuscode (for now: teapot) and error
-
+    console.log(req.body);
+    
     const projectWannabe = req.body;
     console.log("line 26");
-    console.log(req.body);
+    
     try {
         console.log("line 28");
         const validateProject = Project.validate(projectWannabe);

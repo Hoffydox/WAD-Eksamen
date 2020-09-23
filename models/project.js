@@ -1,8 +1,8 @@
 const con = require('../config/connection');
 const sql = require('mssql');
 const Joi = require('joi');
-const bcrypt = require('bcryptjs');
-const crypt = require('../config/encrypt');
+// const bcrypt = require('bcryptjs');
+// const crypt = require('../config/encrypt');
 
 
 
@@ -18,6 +18,7 @@ class Project {
     }
 
     static validate(projectObj) {
+        console.log("her");
         const schema = Joi.object({
             projectId: Joi.number()
                 .integer()
@@ -26,17 +27,18 @@ class Project {
                 .max(50),
             projectDescription: Joi.string()
                 .max(255),
-            projectGoal: Joi.number()
+                projectGoal: Joi.number()
                 .integer
-                .min(10),
-            projectPicture: Joi.string()
+                .min(1),
+                projectPicture: Joi.string()
                 .max(255),
-            projectTimeLimit: Joi.number()
+                projectTimeLimit: Joi.number()
                 .integer
                 .min(1)
         });
-
+        console.log("her 2");
         return schema.validate(projectObj);
+        
     }
 
 
@@ -65,8 +67,8 @@ class Project {
                 // if error, reject with error
                 // CLOSE THE CONNECTION TO DB
                 try {
-
-
+                  
+               
 
                     const pool = await sql.connect(con);
                     const result1 = await pool.request()
@@ -81,7 +83,7 @@ class Project {
                     console.log(result1);
                     if (result1.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' };
 
-
+                    
                     /*
                     const result2 = await pool.request()
                         .input('userID', sql.Int, result1.recordset[0].userID)
@@ -96,15 +98,15 @@ class Project {
                     */
 
 
-                    /*
+                     /*
 
-                   projectName
-                   projectDescription
-                   projectGoal
-                   projectPicture
-                   projectTimeLimit
+                    projectName
+                    projectDescription
+                    projectGoal
+                    projectPicture
+                    projectTimeLimit
 
-                   */
+                    */
 
 
                     const record = {
@@ -113,12 +115,12 @@ class Project {
                         projectDescription: result1.recordset[0].projectDescription,
                         projectPicture: result1.recordset[0].projectPicture,
                         projectTimeLimit: result1.recordset[0].projectTimeLimit
-                        /*
-                             role: {
-                             roleId: result2.recordset[0].roleID,
-                             roleName: result2.recordset[0].roleName
-                         }
-                         */
+                       /*
+                            role: {
+                            roleId: result2.recordset[0].roleID,
+                            roleName: result2.recordset[0].roleName
+                        }
+                        */
                     }
 
                     const { error } = Project.validate(record);
