@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
         console.log("line 32");
 
         // here we check with project.readByName(projectWannabe.projectName)
-        const existingProject = await Project.readByName(projectWannabe.projectName);
+        const existingProject = await Project.readByName(projectWannabe.projectName); // somewhere in here 404
         throw { statusCode: 403, message: 'Cannot save project in DB.' }
     }
     catch (projectCheckError) {
