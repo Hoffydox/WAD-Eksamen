@@ -67,7 +67,6 @@ secretBtn.addEventListener('click', (e) => {
         const { token } = JSON.parse(myStorage.getItem('currentUser'));
         xhttp.setRequestHeader('x-authentication-token', token);
     }
-
     xhttp.send();
 });
 
