@@ -32,7 +32,7 @@ loginBtn.addEventListener('click', (e) => {
                 alert(`Login unsuccessful, error: ${this.status}`);
             }
         }
-        xhttp.open('POST', 'http://127.0.0.1:8171/api/login');
+        xhttp.open('POST', 'http://127.0.0.1:8536/api/login');
         xhttp.setRequestHeader('Content-Type', 'application/json');
 
         const payload = {
