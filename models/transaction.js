@@ -4,7 +4,7 @@ const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 const crypt = require('../config/encrypt');
 
-class transaction {
+class Transaction {
     // constructor
     constructor(transactionObj) {
         this.transactionId = transactionObj.transactionId;
@@ -45,14 +45,14 @@ class transaction {
             transactionCity: Joi.string()
                 .max(255),
             transactionZipCode: Joi.number()
-                .integer
-                .min(4)
-                .max(4),
+                .integer()
+                .min(1000)
+                .max(9999),
             transactionMoney: Joi.number()
-                .integer
+                .integer()
                 .min(1),
             transactionTimeSt: Joi.number()
-                .integer
+                .integer()
                 .min(1),
             projectReceiver: Joi.object({
                 receiverID: Joi.number()
@@ -84,10 +84,10 @@ class transaction {
                 try {
                     const pool = await sql.connect(con);
                     const result = await pool.request()
-                        .input('transactionId', sql.NVarChar(50), Id)
-                        //.input('userID', sql.Int, myStorage.getItem('currentUser').recordset[0].userID) // localStorage getItem('currentUser)
-
-                        .query('SELECT * FROM project WHERE transactionID = @transactionId');
+                        // .input('transactionId', sql.NVarChar(50), Id)
+                        
+                       // .query('SELECT * FROM project WHERE transactionID = @transactionId');
+                      .query('SELECT * FROM transactionTable WHERE transactionID = SCOPE_IDENTITY()');
 
                     console.log(result);
                     if (result.recordset.length == 0) throw { statusCode: 404, message: 'Transaction not found.' };
@@ -157,20 +157,20 @@ class transaction {
 
                     const pool = await sql.connect(con);
                     const result1 = await pool.request()
-                        .input('transactionFirstName', sql.NVarChar(50), this.transactionFirstName)
+                        .input('transactionFirstName', sql.NVarChar(255), this.transactionFirstName)
                         .input('transactionLastName', sql.NVarChar(255), this.transactionLastName)
-                        .input('transactionEmail', sql.INT(), this.transactionEmail) // sql.INT or sql.number????? Gery?
+                        .input('transactionEmail', sql.NVarChar(255), this.transactionEmail) 
                         .input('transactionAdresse', sql.NVarChar(255), this.transactionAdresse)
-                        .input('transactionCity', sql.INT(), this.transactionCity)
+                        .input('transactionCity', sql.NVarChar(255), this.transactionCity)
                         .input('transactionZipCode', sql.INT(), this.transactionZipCode)
                         .input('transactionMoney', sql.INT(), this.transactionMoney)
                         .input('transactionTimeSt', sql.INT(), this.transactionTimeSt)
-                        .input('projectReceiver', sql.INT(), this.projectReceiver.receiverID)
-                        .input('userGiver', sql.INT(), this.userGiver.giverID)
+                        .input('receiverID', sql.INT(), this.projectReceiver.receiverID)
+                        .input('giverID', sql.INT(), this.userGiver.giverID)
 
-                      /* semi kolon for enden???*/.query(`INSERT INTO transactionTable (trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trMoney, trTimeSt, FK_userID, FK_projectID) 
-                                                        VALUES (@transactionFirstName, @transactionLastName, @transactionEmail, @transactionAdresse, @transactionCity, transactionZipCode, transactionMoney, transactionTimeSt, @giverID, @receiverID);
-                                                        SELECT * FROM transactionTable WHERE transactionID = SCOPE_IDENTITY()`);
+                      .query(`INSERT INTO transactionTable (trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trMoney, trTimeSt, FK_userID, FK_projectID) 
+                             VALUES (@transactionFirstName, @transactionLastName, @transactionEmail, @transactionAdresse, @transactionCity, @transactionZipCode, @transactionMoney, @transactionTimeSt, @giverID, @receiverID);
+                            SELECT * FROM transactionTable WHERE transactionID = SCOPE_IDENTITY()`);
                     console.log(result1);
                     if (result1.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' };
                     /*
@@ -206,10 +206,10 @@ class transaction {
                          }
                          */
                     }
-                    const { error } = Project.validate(record);
+                    const { error } = Transaction.validate(record);
                     if (error) throw { statusCode: 409, message: error };
 
-                    resolve(new Project(record));
+                    resolve(new Transaction(record));
                 }
                 catch (err) {
                     console.log(err);
@@ -229,7 +229,7 @@ class transaction {
         });
     }
 }
-module.exports = transaction;
+module.exports = Transaction;
 
 /*  transactionID INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
     trFirstName NVARCHAR(255) NOT NULL,

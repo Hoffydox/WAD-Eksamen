@@ -3,6 +3,7 @@ const cors = require('cors');
 const login = require('./routes/login');
 const users = require('./routes/users');
 const projects = require('./routes/projects');
+const transactions = require('./routes/transactions');
 const setJSON = require('./middleware/setResponseHeaderToJSON');
 
 const app = express();
@@ -17,6 +18,6 @@ app.use(express.json()); // --> req.body
 app.use('/api/login', login);
 app.use('/api/users', users);
 app.use('/api/projects', projects);
-app.use('/api/transactions', projects);
+app.use('/api/transactions', transactions);
 
 app.listen(myPort, () => console.log(`Listening on port ${myPort}...(WAD eksamen)`));
