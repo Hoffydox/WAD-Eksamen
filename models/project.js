@@ -1,6 +1,7 @@
 const con = require('../config/connection');
 const sql = require('mssql');
 const Joi = require('joi');
+const { result } = require('lodash');
 // const bcrypt = require('bcryptjs');
 // const crypt = require('../config/encrypt');
 
@@ -15,6 +16,8 @@ class Project {
         this.projectGoal = projectObj.projectGoal;
         this.projectPicture = projectObj.projectPicture;
         this.projectTimeLimit = projectObj.projectTimeLimit;
+            this.projectOwner = {};
+            this.projectOwner.ownerID = projectObj.projectOwner.ownerID;
     }
 
     static validate(projectObj) {
@@ -34,7 +37,12 @@ class Project {
                 .max(255),
             projectTimeLimit: Joi.number()
                 .integer()
-                .min(1)
+                .min(1),
+            projectOwner: Joi.object({
+                ownerID: Joi.number()
+                    .integer()
+                    .min(1)
+            })
         });
         console.log("her 2");
         return schema.validate(projectObj);
@@ -44,6 +52,7 @@ class Project {
     static readByName(name) {
         return new Promise((resolve, reject) => {
             (async () => {
+                
                 // connect to DB
                 // query: select * from userLogin where userEmail = email
                 // check the result, we should have either 1 or no result
@@ -53,23 +62,15 @@ class Project {
                 // if all good, resolve with new user based on projectWannabe
                 // if error, reject with error
                 // CLOSE THE CONNECTION TO DB
+
                 try {
                     const pool = await sql.connect(con);
                     const result = await pool.request()
                         .input('projectName', sql.NVarChar(50), name)
-                        .input('userID', sql.Int, myStorage.getItem('currentUser').recordset[0].userID) // localStorage getItem('currentUser)
+                        //.input('userID', sql.Int, myStorage.getItem('currentUser').recordset[0].userID) // localStorage getItem('currentUser)
 
-                        // .query('SELECT * FROM project WHERE projectName = @projectName');
+                        .query('SELECT * FROM project WHERE projectName = @projectName');
 
-                        .query(`
-                        
-                        INSERT INTO project (FK_userID)
-                        WHERE projectName = @projectName 
-                        VALUES (SELECT userID FROM userLogin WHERE userLogin.userID = @userID)
-
-                        SELECT * FROM project WHERE projectName = @projectName
-
-                        `); // Gery heeelp
 
                     console.log(result);
                     if (result.recordset.length == 0) throw { statusCode: 404, message: 'Project not found.' };
@@ -141,9 +142,11 @@ class Project {
                         .input('projectGoal', sql.INT(), this.projectGoal) // sql.INT or sql.number????? Gery?
                         .input('projectPicture', sql.NVarChar(255), this.projectPicture)
                         .input('projectTimeLimit', sql.INT(), this.projectTimeLimit)
+                        .input('ownerID', sql.INT(), this.projectOwner.ownerID)
 
-                      /* semi kolon for enden???*/.query(`INSERT INTO project (projectName, projectDescription, projectGoal, projectPicture, projectTimeLimit) 
-                                                                    VALUES (@projectName, @projectDescription, @projectGoal, @projectPicture, @projectTimeLimit)`);
+                      /* semi kolon for enden???*/.query(`INSERT INTO project (projectName, projectDescription, projectGoal, projectPicture, projectTimeLimit, FK_userID) 
+                                                        VALUES (@projectName, @projectDescription, @projectGoal, @projectPicture, @projectTimeLimit, @ownerID);
+                                                        SELECT * FROM project WHERE projectID = SCOPE_IDENTITY()`);
                     console.log(result1);
                     if (result1.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' };
                     /*
@@ -162,8 +165,12 @@ class Project {
                         projectId: result1.recordset[0].projectID,
                         projectName: result1.recordset[0].projectName,
                         projectDescription: result1.recordset[0].projectDescription,
+                        projectGoal: result1.recordset[0].projectGoal,
                         projectPicture: result1.recordset[0].projectPicture,
-                        projectTimeLimit: result1.recordset[0].projectTimeLimit
+                        projectTimeLimit: result1.recordset[0].projectTimeLimit,
+                        projectOwner: {
+                            ownerID: result1.recordset[0].FK_userID
+                        }
                         /*
                              role: {
                              roleId: result2.recordset[0].roleID,

@@ -3,14 +3,14 @@ const Project = require('../models/project');
 const router = express.Router();
 const _ = require('lodash');
 // const { project } = require('../config/connection');
-// const auth = require('../middleware/authenticate');
+const auth = require('../middleware/authenticate');
 // const admin = require('../middleware/admin');
 
 
 
 
 // Create a new PROJECT
-router.post('/', async (req, res) => {
+router.post('/', [auth], async (req, res) => {
 
     // try:
   
@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
     // otherwise respond with statuscode (for now: teapot) and error
     console.log(req.body);
     
-    const projectWannabe = req.body;
+    const projectWannabe = req.body; // payload 
     
     try {
         console.log("line 28");
@@ -38,7 +38,8 @@ router.post('/', async (req, res) => {
     catch (projectCheckError) {
         try {
             if (projectCheckError.statusCode != 404) throw projectCheckError;
-            
+            projectWannabe.projectOwner = {};
+            projectWannabe.projectOwner.ownerID = req.user.userId;
             const newProject = await new Project(projectWannabe).create(projectWannabe); // hvad skal der være her?
             console.log(newProject);
             res.send(JSON.stringify(newProject));
