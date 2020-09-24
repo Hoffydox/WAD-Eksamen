@@ -52,7 +52,7 @@ class Project {
     static readByName(name) {
         return new Promise((resolve, reject) => {
             (async () => {
-                
+
                 // connect to DB
                 // query: select * from userLogin where userEmail = email
                 // check the result, we should have either 1 or no result
@@ -70,7 +70,6 @@ class Project {
                         //.input('userID', sql.Int, myStorage.getItem('currentUser').recordset[0].userID) // localStorage getItem('currentUser)
 
                         .query('SELECT * FROM project WHERE projectName = @projectName');
-
 
                     console.log(result);
                     if (result.recordset.length == 0) throw { statusCode: 404, message: 'Project not found.' };
@@ -133,8 +132,6 @@ class Project {
                 // CLOSE THE CONNECTION TO DB
                 try {
 
-
-
                     const pool = await sql.connect(con);
                     const result1 = await pool.request()
                         .input('projectName', sql.NVarChar(50), this.projectName)
@@ -157,7 +154,6 @@ class Project {
                                 SELECT * FROM userLoginRole INNER JOIN userRole
                                 ON userLoginRole.FK_roleID = userRole.roleID
                                 WHERE userLoginRole.FK_userID = @userID`);
-                    
                     console.log(result2);
                     if (result2.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' }; 
                     */
@@ -201,10 +197,6 @@ class Project {
             })();
         });
     }
-
-
-
-
 }
 module.exports = Project;
 

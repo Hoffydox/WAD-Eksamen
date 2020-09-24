@@ -26,11 +26,9 @@ router.post('/', [auth], async (req, res) => {
     const projectWannabe = req.body; // payload 
     
     try {
-        console.log("line 28");
         const validateProject = Project.validate(projectWannabe);
         if (validateProject.error) throw { statusCode: 400, message: validateProject.error };
-        console.log("line 32");
-
+        
         // here we check with project.readByName(projectWannabe.projectName)
         const existingProject = await Project.readByName(projectWannabe.projectName); // somewhere in here 404
         throw { statusCode: 403, message: 'Cannot save project in DB.' }
@@ -43,7 +41,6 @@ router.post('/', [auth], async (req, res) => {
             const newProject = await new Project(projectWannabe).create(projectWannabe); // hvad skal der være her?
             console.log(newProject);
             res.send(JSON.stringify(newProject));
-            
         }
         catch (err) {
             let errorMessage;
