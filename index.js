@@ -17,5 +17,6 @@ app.use(express.json()); // --> req.body
 app.use('/api/login', login);
 app.use('/api/users', users);
 app.use('/api/projects', projects);
+app.use('/api/transactions', projects);
 
 app.listen(myPort, () => console.log(`Listening on port ${myPort}...(WAD eksamen)`));

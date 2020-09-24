@@ -4,8 +4,6 @@ const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 const crypt = require('../config/encrypt');
 
-
-
 class transaction {
     // constructor
     constructor(transactionObj) {
@@ -28,7 +26,6 @@ class transaction {
 
         this.userGiver = {};
         this.userGiver.giverID = transactionObj.userGiver.giverID;
-
     }
 
     static validate(transactionObj) {
@@ -71,46 +68,48 @@ class transaction {
         return schema.validate(transactionObj);
     }
 
-
-    static readByName(name) {
+    static readById(Id) {
         return new Promise((resolve, reject) => {
             (async () => {
-
                 // connect to DB
                 // query: select * from userLogin where userEmail = email
                 // check the result, we should have either 1 or no result
                 //  --> if no result: user is not found
                 //  --> if more results: corrupt DB
-                // create a new projectWannabe object and validate (can it be a user?)
-                // if all good, resolve with new user based on projectWannabe
+                // create a new transactionWannabe object and validate (can it be a user?)
+                // if all good, resolve with new user based on transactionWannabe
                 // if error, reject with error
                 // CLOSE THE CONNECTION TO DB
 
                 try {
                     const pool = await sql.connect(con);
                     const result = await pool.request()
-                        .input('projectName', sql.NVarChar(50), name)
+                        .input('transactionId', sql.NVarChar(50), Id)
                         //.input('userID', sql.Int, myStorage.getItem('currentUser').recordset[0].userID) // localStorage getItem('currentUser)
 
-                        .query('SELECT * FROM project WHERE projectName = @projectName');
+                        .query('SELECT * FROM project WHERE transactionID = @transactionId');
 
                     console.log(result);
-                    if (result.recordset.length == 0) throw { statusCode: 404, message: 'Project not found.' };
+                    if (result.recordset.length == 0) throw { statusCode: 404, message: 'Transaction not found.' };
                     if (result.recordset.length > 1) throw { statusCode: 500, message: 'Database is corrupt.' };
 
-                    const projectWannabe = {
-                        projectId: result.recordset[0].projectID,
-                        projectName: result.recordset[0].projectName,
-                        projectDescription: result.recordset[0].projectDescription,
-                        projectGoal: result.recordset[0].projectGoal,
-                        projectPicture: result.recordset[0].projectPicture,
-                        projectTimeLimit: result.recordset[0].projectTimeLimit
+                    const transactionWannabe = {
+                        transactionId: result.recordset[0].projectID,
+                        transactionFirstName: result.recordset[0].transactionFirstName,
+                        transactionLastName: result.recordset[0].transactionLastName,
+                        transactionEmail: result.recordset[0].transactionEmail,
+                        transactionAdresse: result.recordset[0].transactionAdresse,
+                        transactionCity: result.recordset[0].transactionCity,
+                        transactionZipCode: result.recordset[0].transactionZipCode,
+                        transactionMoney: result.recordset[0].transactionMoney,
+                        transactionTimeSt: result.recordset[0].transactionTimeSt
+                       
                     }
 
-                    const { error } = Project.validate(projectWannabe);
+                    const { error } = Project.validate(transactionWannabe);
                     if (error) throw { statusCode: 409, message: error };
 
-                    resolve(new Project(projectWannabe));
+                    resolve(new Project(transactionWannabe));
                 }
                 catch (err) {
                     console.log(err);
@@ -136,11 +135,11 @@ class transaction {
     create(projectOptionsObj) {
         return new Promise((resolve, reject) => {
             (async () => {
+
                 //// this will be handled on route-handler level:
                 //// check if the user already exists in the DB (static readByEmail)
                 ////      --> if exists, then terminate create method, may not add the same user again
                 ////      --> if doesnt exist then carry on
-
                 // make hashPassword from projectOptionsObj.password
                 // connect to the DB
                 // make a query to insert user into userLogin table
@@ -153,20 +152,25 @@ class transaction {
                 // if all good, resolve with the new user object
                 // if error, reject with error
                 // CLOSE THE CONNECTION TO DB
+
                 try {
 
                     const pool = await sql.connect(con);
                     const result1 = await pool.request()
-                        .input('projectName', sql.NVarChar(50), this.projectName)
-                        .input('projectDescription', sql.NVarChar(255), this.projectDescription)
-                        .input('projectGoal', sql.INT(), this.projectGoal) // sql.INT or sql.number????? Gery?
-                        .input('projectPicture', sql.NVarChar(255), this.projectPicture)
-                        .input('projectTimeLimit', sql.INT(), this.projectTimeLimit)
-                        .input('ownerID', sql.INT(), this.projectOwner.ownerID)
+                        .input('transactionFirstName', sql.NVarChar(50), this.transactionFirstName)
+                        .input('transactionLastName', sql.NVarChar(255), this.transactionLastName)
+                        .input('transactionEmail', sql.INT(), this.transactionEmail) // sql.INT or sql.number????? Gery?
+                        .input('transactionAdresse', sql.NVarChar(255), this.transactionAdresse)
+                        .input('transactionCity', sql.INT(), this.transactionCity)
+                        .input('transactionZipCode', sql.INT(), this.transactionZipCode)
+                        .input('transactionMoney', sql.INT(), this.transactionMoney)
+                        .input('transactionTimeSt', sql.INT(), this.transactionTimeSt)
+                        .input('projectReceiver', sql.INT(), this.projectReceiver.receiverID)
+                        .input('userGiver', sql.INT(), this.userGiver.giverID)
 
-                      /* semi kolon for enden???*/.query(`INSERT INTO project (projectName, projectDescription, projectGoal, projectPicture, projectTimeLimit, FK_userID) 
-                                                        VALUES (@projectName, @projectDescription, @projectGoal, @projectPicture, @projectTimeLimit, @ownerID);
-                                                        SELECT * FROM project WHERE projectID = SCOPE_IDENTITY()`);
+                      /* semi kolon for enden???*/.query(`INSERT INTO transactionTable (trFirstName, trLastName, trEmail, trAdresse, trCity, trZipCode, trMoney, trTimeSt, FK_userID, FK_projectID) 
+                                                        VALUES (@transactionFirstName, @transactionLastName, @transactionEmail, @transactionAdresse, @transactionCity, transactionZipCode, transactionMoney, transactionTimeSt, @giverID, @receiverID);
+                                                        SELECT * FROM transactionTable WHERE transactionID = SCOPE_IDENTITY()`);
                     console.log(result1);
                     if (result1.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' };
                     /*
@@ -181,14 +185,19 @@ class transaction {
                     if (result2.recordset.length != 1) throw { statusCode: 500, message: 'Database is corrupt.' }; 
                     */
                     const record = {
-                        projectId: result1.recordset[0].projectID,
-                        projectName: result1.recordset[0].projectName,
-                        projectDescription: result1.recordset[0].projectDescription,
-                        projectGoal: result1.recordset[0].projectGoal,
-                        projectPicture: result1.recordset[0].projectPicture,
-                        projectTimeLimit: result1.recordset[0].projectTimeLimit,
-                        projectOwner: {
-                            ownerID: result1.recordset[0].FK_userID
+                        transactionFirstName: result1.recordset[0].transactionFirstName,
+                        transactionLastName: result1.recordset[0].transactionLastName,
+                        transactionEmail: result1.recordset[0].transactionEmail,
+                        transactionAdresse: result1.recordset[0].transactionAdresse,
+                        transactionCity: result1.recordset[0].transactionCity,
+                        transactionZipCode: result1.recordset[0].transactionZipCode,
+                        transactionMoney: result1.recordset[0].transactionMoney,
+                        transactionTimeSt: result1.recordset[0].transactionTimeSt,
+                        projectReceiver: {
+                            receiverID: result1.recordset[0].FK_projectID
+                        },
+                        userGiver: {
+                            giverID: result1.recordset[0].FK_userID
                         }
                         /*
                              role: {
@@ -197,7 +206,6 @@ class transaction {
                          }
                          */
                     }
-
                     const { error } = Project.validate(record);
                     if (error) throw { statusCode: 409, message: error };
 

@@ -10,10 +10,9 @@ const auth = require('../middleware/authenticate');
 
 
 // Create a new transaction
-router.post('/', [auth], async (req, res) => {
+router.post('/:projectId', [auth], async (req, res) => { // projectId
 
     // try:
-  
     // validate the transaction-wannabe object
     // validate the password object
     // check if the transaction's Name is in the db already (call transaction.readByName) (if the transactions transaction is in the db)
@@ -30,7 +29,7 @@ router.post('/', [auth], async (req, res) => {
         if (validateTransaction.error) throw { statusCode: 400, message: validateTransaction.error };
         
         // here we check with transaction.readByName(transactionWannabe.transactionName)
-        const existingTransaction = await Transaction.readByName(transactionWannabe.transactionName); // somewhere in here 404
+        const existingTransaction = await Transaction.readById(transactionWannabe.transactionId); // somewhere in here 404
         throw { statusCode: 403, message: 'Cannot save transaction in DB.' }
     }
     catch (transactionCheckError) {
