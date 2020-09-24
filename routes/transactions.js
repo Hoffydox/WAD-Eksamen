@@ -43,11 +43,10 @@ router.post('/:projectId', [auth], async (req, res) => { // projectId
             transactionWannabe.projectReceiver.receiverID = req.params.projectId;
             transactionWannabe.userGiver = {};
             transactionWannabe.userGiver.giverID = req.user.userId;
-            
             console.log("B")
             const newTransaction = await new Transaction(transactionWannabe).create(transactionWannabe); // hvad skal der være her?
-            console.log(newTransaction);
-            res.send(JSON.stringify(newTransaction));
+            console.log(newTransaction);                // Det meste er undifined? Gery?
+            res.send(JSON.stringify(newTransaction));   // Men det her er fint (som også er det vigtigste)
         }
         catch (err) {
             let errorMessage;
