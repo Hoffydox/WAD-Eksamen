@@ -20,7 +20,7 @@ loginBtn.addEventListener('click', (e) => {
         alert('Enter e-mail and password!')
     } else {
         const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
+        xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 alert(`Login successful: ${xhttp.responseText}`);
                 const data = JSON.parse(xhttp.responseText);
@@ -47,7 +47,7 @@ loginBtn.addEventListener('click', (e) => {
 
 secretBtn.addEventListener('click', (e) => {
     const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
+    xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             const data = JSON.parse(this.responseText);
             console.log(data);

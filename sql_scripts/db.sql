@@ -1,5 +1,8 @@
 USE "1074171"
+<<<<<<< Updated upstream
 --USE "1081536"
+=======
+>>>>>>> Stashed changes
 
 
 /* ------------------------- START OF DROPPING TABLES ---------------------- */
