@@ -21,6 +21,7 @@ router.post('/', async (req, res) => {
     const userWannabe = _.omit(req.body, 'password');
     const passwordWannabe = _.pick(req.body, 'password');
     console.log("line 23");
+    console.log(req.body);
     try {
         const validateUser = User.validate(userWannabe);
         if (validateUser.error) throw { statusCode: 400, message: validateUser.error };

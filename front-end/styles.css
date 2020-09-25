@@ -62,7 +62,7 @@ h1 {
 }
 
 /*opret side*/
-.opret {
+.opret, .login {
     margin-top: 6vw;
     margin-left: 35vw;
     border: 6px solid #99F2C8;

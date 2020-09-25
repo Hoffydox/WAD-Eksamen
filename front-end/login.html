@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="styles.css" rel="stylesheet">
     <title>Backers - Login</title>
+    <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -21,7 +22,7 @@
             <a href="login.html"><strong>LOGIN</strong></a>
         </nav>
     </div>
-    <div class="opret">
+    <div class="login">
         <h1>Login</h1>
 
         <input type="email" id="loginNavn" placeholder="e-mail" />
@@ -30,31 +31,47 @@
         <input type="password" id="loginPassword" placeholder="kode" />
         <br />
         <button class="btn" id="loginBtn">
-        <a href="#">Login</a>
-        <!--profil.html-->
-    </button>
+            <a href="#">Login</a>
+            <!--profil.html-->
+        </button>
         <br />
-        <button class="btn" id="logoutBtn"><a href="#">logout</a></button>
         <!--
             <button id="enterProtectedArea">Secret place</button>
         -->
-        
+
 
     </div>
     <div class="opret">
         <h1>Opret bruger</h1>
-        <input type="email" id="opretName" placeholder="e-mail" />
+        <br>
+        <label for="signupemail">E-mail:</label>
+        <br>
+        <input type="email" id="signUpEmail" placeholder="e-mail" name="signupemail" />
         <br />
-        <input type="password" id="opretPassword" placeholder="kode" />
+        <label for="fname">Fornavn:</label>
+        <br>
+        <input type="text" id="signUpFirstName" name="fname">
+        <br>
+        <label for="lname">Efternavn:</label>
+        <br>
+        <input type="text" id="signUpLastName" name="lname">
+        <br>
+        <label for="signuppass">Kodeord:</label>
+        <br>
+        <input type="password" id="signUpPassword" placeholder="kode" name="signuppass" />
         <br />
-        <input type="password" id="opretPassword" placeholder="kode" />
         <br />
-        <button class="btn">
-        <a href="profil.html">Opret</a>
-    </button>
+        <button class="btn" id="signUpBtn"><a href="#">Opret</a></button>
     </div>
 
-    <script src="script.js" defer></script>
+
+    <div class="opret">
+        <h1>log af</h1>
+        <br>
+        <button class="btn" id="logoutBtn"><a href="#">out</a></button>
+    </div>
+
+    
 
 </body>
 
