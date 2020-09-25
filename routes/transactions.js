@@ -12,6 +12,9 @@ const auth = require('../middleware/authenticate');
 // Create a new transaction
 router.post('/:projectId', [auth], async (req, res) => { // projectId
 
+    // req.params validate if it is project
+        // if no send error
+
     // try:
     // validate the transaction-wannabe object
     // validate the password object
@@ -30,7 +33,7 @@ router.post('/:projectId', [auth], async (req, res) => { // projectId
         if (validateTransaction.error) throw { statusCode: 400, message: validateTransaction.error };
         console.log("line 30")
         // here we check with transaction.readByName(transactionWannabe.transactionName)
-        const existingTransaction = await Transaction.readById(transactionWannabe.transactionId); // somewhere in here 404
+        const existingTransaction = await Transaction.readById(transactionWannabe.transactionId);
         console.log("line 35")
         throw { statusCode: 403, message: 'Cannot save transaction in DB.' }
         
@@ -44,7 +47,7 @@ router.post('/:projectId', [auth], async (req, res) => { // projectId
             transactionWannabe.userGiver = {};
             transactionWannabe.userGiver.giverID = req.user.userId;
             console.log("B")
-            const newTransaction = await new Transaction(transactionWannabe).create(transactionWannabe); // hvad skal der være her?
+            const newTransaction = await new Transaction(transactionWannabe).create(transactionWannabe); 
             console.log(newTransaction);                // Det meste er undifined? Gery?
             res.send(JSON.stringify(newTransaction));   // Men det her er fint (som også er det vigtigste)
         }

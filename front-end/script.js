@@ -5,7 +5,7 @@ const logoutBtn = document.querySelector('#logoutBtn');
 const secretBtn = document.querySelector('#enterProtectedArea');
 const myStorage = window.localStorage;
 
-
+const server = "http://127.0.0.1:8171";
 
 // login (ikke create)
 loginBtn.addEventListener('click', (e) => {
@@ -27,12 +27,13 @@ loginBtn.addEventListener('click', (e) => {
                 console.log(data);
                 // render DOM elements with the info we got back -e.g. 'hello user'
                 myStorage.setItem('currentUser', xhttp.responseText);
+                window.location.href = "http://127.0.0.1:5500/front-end/index.html";
             }
             if (this.readyState == 4 && this.status >= 400) {
                 alert(`Login unsuccessful, error: ${this.status}`);
             }
         }
-        xhttp.open('POST', 'http://127.0.0.1:8171/api/login');
+        xhttp.open('POST', `${server}/api/login`);
         xhttp.setRequestHeader('Content-Type', 'application/json');
 
         const payload = {
@@ -41,10 +42,11 @@ loginBtn.addEventListener('click', (e) => {
         }
 
         xhttp.send(JSON.stringify(payload));
+        
     }
-
+    
 }, false);
-
+/* 
 secretBtn.addEventListener('click', (e) => {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -69,6 +71,7 @@ secretBtn.addEventListener('click', (e) => {
     }
     xhttp.send();
 });
+*/
 
 logoutBtn.addEventListener('click', (e) => {
     myStorage.removeItem('currentUser');
