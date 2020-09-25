@@ -5,7 +5,8 @@ const logoutBtn = document.querySelector('#logoutBtn');
 const secretBtn = document.querySelector('#enterProtectedArea');
 const myStorage = window.localStorage;
 
-const server = "http://127.0.0.1:8171";
+// const server = "http://127.0.0.1:8171";
+const server = "https://mmd.ucn.dk:8171";
 
 // login (ikke create)
 loginBtn.addEventListener('click', (e) => {
