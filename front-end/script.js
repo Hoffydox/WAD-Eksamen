@@ -24,6 +24,11 @@ const ptimelimit = document.querySelector('#ptimelimit');
  // const createProjectBtn = document.querySelector('#createProjectBtn');
 
 
+//   console.log("Script loaded");
+  // getData();  // henter data fra api'en
+   
+  
+ 
 
 // const serverURL = "https://mmd.ucn.dk:8171";
 
@@ -116,6 +121,7 @@ signUpBtn.addEventListener('click', (e) => {
 logoutBtn.addEventListener('click', (e) => {
     console.log(e);
     myStorage.removeItem('currentUser');
+    alert("you are now logged out :)");
 
 });
 
@@ -166,6 +172,44 @@ function createProject () {
 
     }
 }
+
+// GET projekter til index.html
+/*
+function getData() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        const data = JSON.parse(this.responseText);
+        console.log(data);
+  
+        // fører koden videre til en function ved navn renderprojects
+        renderProjects(data);
+      }
+    }
+    // xhttp.open('GET', `${WPurl}posts/?tags=${postInfoId}`, true);
+    xhttp.open('GET', `${WPurl}api/projects`, true);
+    //xhttp.open('GET', `${WPurl}${WPkey}`, true);
+    xhttp.send();
+  }
+  
+  function renderProjects(data) { // starter Render funktionen. Alt bliver renderet i querySelector elementet.
+    document.querySelector('#vejrAPI').innerHTML = `
+      <div class="temp">
+         
+      </div>
+      <div class="tempIcon">
+      <img src="/front-end/images/${data.projects[0].icon}">   
+      </div>
+      `;
+    // Math.round() Runder tallet op.
+  }
+*/
+
+  
+  
+  
+
+
 
 
 

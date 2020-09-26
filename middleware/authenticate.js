@@ -15,7 +15,7 @@ module.exports = async (req, res, next) => {
     // move onto the next in the request pipeline
     console.log("auth starts");
     try {
-        //var token = JSON.parse(localStorage.getItem("currentUser", "token:"));
+       // var token = JSON.parse(localStorage.getItem("currentUser", "token:"));
         console.log(req.body);
         const token = req.header('x-authentication-token');
         
