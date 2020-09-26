@@ -12,6 +12,8 @@ const auth = require('../middleware/authenticate');
 // Create a new PROJECT
 router.post('/', [auth], async (req, res) => {
 
+
+    
     // try:
   
     // validate the project-wannabe object

@@ -123,6 +123,10 @@ logoutBtn.addEventListener('click', (e) => {
 
 function createProject () {
     console.log("started");
+    console.log(localStorage.getItem("currentUser", "token:"));
+    //var token = JSON.parse(localStorage.getItem("currentUser", "token:"));
+    //console.log(token);
+
     if (!(pNavn.value && bTekst.value && dMål.value && pbillede.value && ptimelimit.value)) {
         alert('Udfyld alle felterne!')
     } else {
@@ -143,6 +147,12 @@ function createProject () {
         }
         xhttp.open('POST', `${serverURL}/api/projects`);
         xhttp.setRequestHeader('Content-Type', 'application/json');
+        //xhttp.setRequestHeader('x-authentication-token', token);
+
+        if (myStorage.getItem('currentUser')) {
+            const { token } = JSON.parse(myStorage.getItem('currentUser'));
+            xhttp.setRequestHeader('x-authentication-token', token);
+        }
 
         const payload = {
             projectName: pNavn.value,

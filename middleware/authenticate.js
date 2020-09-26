@@ -13,8 +13,12 @@ module.exports = async (req, res, next) => {
     //
     // add the decoded content to the request object
     // move onto the next in the request pipeline
+    console.log("auth starts");
     try {
+        //var token = JSON.parse(localStorage.getItem("currentUser", "token:"));
+        console.log(req.body);
         const token = req.header('x-authentication-token');
+        
         if (!token) throw {statusCode: 401, message: 'Access denied: no token provided.'};
 
         console.log(token);
@@ -37,3 +41,7 @@ module.exports = async (req, res, next) => {
         res.status(errorMessage.statusCode).send(JSON.stringify(errorMessage));
     }
 };
+
+//console.log(JSON.parse(localStorage.currentUser));
+
+// JSON.parse(localStorage.getItem("currentUser", "token"));
