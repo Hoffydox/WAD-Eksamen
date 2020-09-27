@@ -80,6 +80,9 @@ h2 {
     text-align: center;
 
 }
+input {
+    margin: 0.5vw;
+}
 .info {
     width: 30vw;
     float: none;
