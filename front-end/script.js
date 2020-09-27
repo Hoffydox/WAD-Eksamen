@@ -132,7 +132,10 @@ function createProject() {
 
                 // window.location.href = `${serverURL}/front-end/index.html`; // skifter side
             }
-            if (this.readyState == 4 && this.status >= 400) {
+            if (this.readyState == 4 && this.status == 401) {
+                alert(`Du er ikke logget ind!: error: ${this.status}`);
+            }
+            else if (this.readyState == 4 && this.status >= 400) {
                 alert(`Fejl i oprettelsen af projektet, error: ${this.status}`);
             }
         }

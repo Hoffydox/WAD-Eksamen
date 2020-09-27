@@ -58,7 +58,14 @@ router.post('/', [auth], async (req, res) => {
                                             // get all projects
 router.get('/', async (req, res) => {
 
+    const projectRenderer = req;
+    const getProjects = Project.getData(projectRenderer);
+
+    res.send({getProjects});
     
+    //res.send(JSON.parse({GetProjects}));
+
+    /*
     const projectRenderer = req;
     
     try {
@@ -71,7 +78,7 @@ router.get('/', async (req, res) => {
             //projectWannabe.projectOwner = {};
             //projectWannabe.projectOwner.ownerID = req.user.userId;
        
-            res.send(JSON.stringify(GetProjects));
+            res.send(JSON.parse({GetProjects}));
             
         }
         catch (err) {
@@ -87,6 +94,15 @@ router.get('/', async (req, res) => {
             res.status(errorMessage.statusCode).send(JSON.stringify(errorMessage));
         }
     }
+    */
+    
+
+    /* 
+
+
+     
+
+    */
 });
                                             // get specifik project
 router.get('/:projectId', async (req, res) => {
