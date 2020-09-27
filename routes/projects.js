@@ -58,10 +58,37 @@ router.post('/', [auth], async (req, res) => {
                                             // get all projects
 router.get('/', async (req, res) => {
 
-    res.send('hello from all projects!')
+    
+    const projectRenderer = req;
+    try {
+        const GetProjects = Project.getData(projectRenderer);
+        if (GetProjects.error) throw { statusCode: 400, message: GetProjects.error };
+    }
+    catch (projectCheckError) {
+        try {
+            if (projectCheckError.statusCode != 404) throw projectCheckError;
+            //projectWannabe.projectOwner = {};
+            //projectWannabe.projectOwner.ownerID = req.user.userId;
+       
+            res.send(JSON.stringify(GetProjects));
+            
+        }
+        catch (err) {
+            let errorMessage;
+            if (!err.statusCode) {
+                errorMessage = {
+                    statusCode: 500,
+                    message: err
+                }
+            } else {
+                errorMessage = err;
+            }
+            res.status(errorMessage.statusCode).send(JSON.stringify(errorMessage));
+        }
+    }
 });
                                             // get specifik project
-router.get('/', async (req, res) => {
+router.get('/:projectId', async (req, res) => {
 
     // try:
     // validate the project-wannabe object

@@ -1,6 +1,7 @@
 const myStorage = window.localStorage;
 
 const serverURL = 'http://127.0.0.1:8171';
+// const serverURL = "https://mmd.ucn.dk:8171";
 
 const loginName = document.querySelector('#loginNavn');
 const loginPassword = document.querySelector('#loginPassword');
@@ -21,16 +22,7 @@ const bTekst = document.querySelector('#bTekst');
 const dMål = document.querySelector('#dMål');
 const pbillede = document.querySelector('#pbillede');
 const ptimelimit = document.querySelector('#ptimelimit');
- // const createProjectBtn = document.querySelector('#createProjectBtn');
 
-
-//   console.log("Script loaded");
-  // getData();  // henter data fra api'en
-   
-  
- 
-
-// const serverURL = "https://mmd.ucn.dk:8171";
 
 // login (ikke create)
 loginBtn.addEventListener('click', (e) => {
@@ -72,14 +64,7 @@ loginBtn.addEventListener('click', (e) => {
 
 }, false);
 
-// Sign up (CREATE)
-/*
-signUpEmail
-signUpFirstName
-signUpLastName
-signUpPassword
-signUpBtn
-*/
+// Sign up (CREATE user)
 signUpBtn.addEventListener('click', (e) => {
     console.log(e);
     if (!(signUpEmail.value && signUpFirstName.value && signUpLastName.value && signUpPassword.value)) {
@@ -117,7 +102,7 @@ signUpBtn.addEventListener('click', (e) => {
 }, false);
 
 
-
+// Logout (remove currentUser from localStorage)
 logoutBtn.addEventListener('click', (e) => {
     console.log(e);
     myStorage.removeItem('currentUser');
@@ -126,8 +111,8 @@ logoutBtn.addEventListener('click', (e) => {
 });
 
 
-
-function createProject () {
+// Create project
+function createProject() {
     console.log("started");
     console.log(localStorage.getItem("currentUser", "token:"));
     //var token = JSON.parse(localStorage.getItem("currentUser", "token:"));
@@ -172,46 +157,6 @@ function createProject () {
 
     }
 }
-
-// GET projekter til index.html
-/*
-function getData() {
-    const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        const data = JSON.parse(this.responseText);
-        console.log(data);
-  
-        // fører koden videre til en function ved navn renderprojects
-        renderProjects(data);
-      }
-    }
-    // xhttp.open('GET', `${WPurl}posts/?tags=${postInfoId}`, true);
-    xhttp.open('GET', `${WPurl}api/projects`, true);
-    //xhttp.open('GET', `${WPurl}${WPkey}`, true);
-    xhttp.send();
-  }
-  
-  function renderProjects(data) { // starter Render funktionen. Alt bliver renderet i querySelector elementet.
-    document.querySelector('#vejrAPI').innerHTML = `
-      <div class="temp">
-         
-      </div>
-      <div class="tempIcon">
-      <img src="/front-end/images/${data.projects[0].icon}">   
-      </div>
-      `;
-    // Math.round() Runder tallet op.
-  }
-*/
-
-  
-  
-  
-
-
-
-
 
 /*
 secretBtn.addEventListener('click', (e) => {

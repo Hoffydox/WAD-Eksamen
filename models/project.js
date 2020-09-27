@@ -197,6 +197,71 @@ class Project {
             })();
         });
     }
+
+    static getData(data) {
+        return new Promise((resolve, reject) => {
+            (async () => {
+
+                // connect to DB
+                // query: select * from userLogin where userEmail = email
+                // check the result, we should have either 1 or no result
+                //  --> if no result: user is not found
+                //  --> if more results: corrupt DB
+                // create a new projectWannabe object and validate (can it be a user?)
+                // if all good, resolve with new user based on projectWannabe
+                // if error, reject with error
+                // CLOSE THE CONNECTION TO DB
+
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                        // .input('projectName', sql.NVarChar(50), name) 
+                        //.input('userID', sql.Int, myStorage.getItem('currentUser').recordset[0].userID) // localStorage getItem('currentUser)
+
+                        .query('SELECT * FROM project');
+
+                    console.log(result);
+                    if (result.recordset.length == 0) throw { statusCode: 404, message: 'Projects not found.' };
+                    
+
+                    const projectData = {
+                        projectId: result.recordset[0].projectID,
+                        projectName: result.recordset[0].projectName,
+                        projectDescription: result.recordset[0].projectDescription,
+                        projectGoal: result.recordset[0].projectGoal,
+                        projectPicture: result.recordset[0].projectPicture,
+                        projectTimeLimit: result.recordset[0].projectTimeLimit,
+                        projectOwner: {
+                            ownerID: result.recordset[0].FK_userID
+                        }
+                    }
+
+                    //const { error } = Project.validate(projectData);
+                    //if (error) throw { statusCode: 409, message: error };
+
+                    resolve(new Project(projectData));
+                }
+                catch (err) {
+                    console.log(err);
+                    let errorMessage;
+                    if (!err.statusCode) {
+                        errorMessage = {
+                            statusCode: 500,
+                            message: err
+                        }
+                    } else {
+                        errorMessage = err;
+                    }
+                    reject(errorMessage);
+                }
+                sql.close();
+            })();
+        });
+    }
+
+
+
+
 }
 module.exports = Project;
 
