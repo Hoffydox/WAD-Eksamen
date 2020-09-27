@@ -60,6 +60,7 @@ router.get('/', async (req, res) => {
 
     
     const projectRenderer = req;
+    
     try {
         const GetProjects = Project.getData(projectRenderer);
         if (GetProjects.error) throw { statusCode: 400, message: GetProjects.error };
