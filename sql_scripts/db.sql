@@ -1,5 +1,13 @@
 USE "1074171"
 
+/* ----------------------------------------------------------------------------------------------------
+!!!!!!!
+            Vigtigt:
+            Opret en ny bruger for at logge ind.
+            De brugere der er lavet på forhånd virker lige pludselig ikke :'(
+!!!!!!
+-----------------------------------------------------------------------------------------------------------------------------*/ 
+
 
 /* ------------------------- START OF DROPPING TABLES ---------------------- */
 
@@ -214,7 +222,7 @@ VALUES
 INSERT INTO userLogin
     (userEmail, userFirstName, userLastName, userPassword)
 VALUES
-    ('admin@db.dk', 'Andreas', 'Hoffmann', 'password1'),
+    ('admin@admin.dk', 'admin', 'admin', 'password1'),
     ('miniadmin@db.dk', 'Gunther', 'Gnyt', 'password2'),
     ('Editor@db.dk', 'Gimli', 'Gammel', 'password3'),
     ('author@db.dk', 'Legolas', 'Jensen', 'password4'),
@@ -241,7 +249,7 @@ GO
 INSERT INTO userPassword
     (FK_userID, hashedPassword)
 VALUES
-    (1, 'adminPassword'),
+    (1, 'adminpassword'),
     (2, 'GuntherPassword'),
     (3, 'GimliPassword'),
     (4, 'LegolasPassword'),
@@ -273,7 +281,6 @@ VALUES
     ('Hans', 'Christian', 'Andersen@ucn.dk', 'Odensevej 99', 'Odense', 4000, 100, 10102010, 5, 3)
    
      GO
- 
 
  SELECT *
     FROM userLogin
