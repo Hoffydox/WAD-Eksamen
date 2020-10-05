@@ -34,7 +34,7 @@ function renderProjects(data) { // starter Render funktionen. Alt bliver rendere
     document.querySelector('#testrenderer').innerHTML = `
     <h2>${data[0].projectName}</h2>
     <button class="btn">
-           
+    <img src="#" alt="">
             <a href="projekt.html">Se projekt</a>
         </button>
     <h2>${data[1].projectName}</h2>
@@ -45,7 +45,7 @@ function renderProjects(data) { // starter Render funktionen. Alt bliver rendere
     <h2>${data[2].projectName}</h2>
     <button  class="btn">
             <a href="projekt.html">Se projekt</a>
-            <img  alt="">
+            
         </button>
       
       `;
