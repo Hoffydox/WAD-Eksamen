@@ -16,6 +16,7 @@ function getData() {
         if (this.readyState == 4 && this.status == 200){
             const data = JSON.parse(xhttp.responseText);
             console.log(data);
+            console.log(data[2].projectName);
 
             // fører koden videre til en function ved navn renderprojects
             renderProjects(data);
@@ -29,19 +30,19 @@ function getData() {
 }
 
 
-function renderProjects(data){ // starter Render funktionen. Alt bliver renderet i querySelector elementet.
+function renderProjects(data) { // starter Render funktionen. Alt bliver renderet i querySelector elementet.
     document.querySelector('#testrenderer').innerHTML = `
-    <h2>${data}</h2>
+    <h2>${data[0].projectName}</h2>
     <button class="btn">
            
             <a href="projekt.html">Se projekt</a>
         </button>
-    <h2>Projekt 2</h2>
+    <h2>${data[1].projectName}</h2>
     <button class="btn">
             <a href="projekt.html">Se projekt</a>
         </button>
     <br>
-    <h2>Projekt 3</h2>
+    <h2>${data[2].projectName}</h2>
     <button  class="btn">
             <a href="projekt.html">Se projekt</a>
             <img  alt="">

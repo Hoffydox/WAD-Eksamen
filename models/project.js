@@ -198,7 +198,7 @@ class Project {
         });
     }
 
-    static getData(data) {
+    static getData() {
         return new Promise((resolve, reject) => {
             (async () => {
 
@@ -223,41 +223,40 @@ class Project {
                     console.log(result);
                     if (result.recordset.length == 0) throw { statusCode: 404, message: 'Projects not found.' };
                     
-
+                    const books = []; // if there is no book this array would be empty
+                    result.recordset.forEach(record => {
                     const projectData = {
-                        projectId: result.recordset[0].projectID,
-                        projectName: result.recordset[0].projectName,
-                        projectDescription: result.recordset[0].projectDescription,
-                        projectGoal: result.recordset[0].projectGoal,
-                        projectPicture: result.recordset[0].projectPicture,
-                        projectTimeLimit: result.recordset[0].projectTimeLimit,
+                        projectId: record.projectID,
+                        projectName: record.projectName,
+                        projectDescription: record.projectDescription,
+                        projectGoal: record.projectGoal,
+                        projectPicture: record.projectPicture,
+                        projectTimeLimit: record.projectTimeLimit,
                         projectOwner: {
-                            ownerID: result.recordset[0].FK_userID
+                            ownerID: record.FK_userID
                         }
                     }
+                
 
                     //const { error } = Project.validate(projectData);
                     //if (error) throw { statusCode: 409, message: error };
 
-                    resolve(new Project(projectData));
-                }
-                catch (err) {
-                    console.log(err);
-                    let errorMessage;
-                    if (!err.statusCode) {
-                        errorMessage = {
-                            statusCode: 500,
-                            message: err
-                        }
-                    } else {
-                        errorMessage = err;
-                    }
-                    reject(errorMessage);
-                }
-                sql.close();
-            })();
-        });
-    }
+                    //const { error } = Book.validate(projectData);
+                    //if (error) throw error;
+
+                    books.push(new Project(projectData)); // the info is now in the array
+                });
+
+                resolve(books);
+            }
+            catch (err) {
+                console.log(err);
+                reject(err);
+            }
+            sql.close();
+        })();
+    });
+}
 
 
 

@@ -58,12 +58,22 @@ router.post('/', [auth], async (req, res) => {
                                             // get all projects
 router.get('/', async (req, res) => {
 
-    const projectRenderer = req;
-    const getProjects = Project.getData(projectRenderer);
+    //const projectRenderer = req.body;
+    //const getProjects = Project.getData(projectRenderer);
 
-    res.send({getProjects});
+    //res.send({getProjects});
     
-    //res.send(JSON.parse({GetProjects}));
+    //res.send(JSON.parse({getProjects}));
+
+
+    try {
+        const data = await Project.getData();
+        res.send(JSON.stringify(data));
+    }
+    catch (err) {
+        res.status(418).send(JSON.stringify(err));
+    }
+
 
     /*
     const projectRenderer = req;
